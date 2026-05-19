@@ -45,17 +45,25 @@ os.makedirs(IMAGES_DIR, exist_ok=True)
 # URL API
 API_URL = config_data.get("api_url", "http://127.0.0.1:8000")
 
+# Setup Resource Directory untuk Pyinstaller
+if getattr(sys, 'frozen', False):
+    RESOURCE_DIR = sys._MEIPASS
+else:
+    RESOURCE_DIR = BASE_DIR
+
 # Inisialisasi Firebase
-# Mencari file JSON di folder migrate yang merupakan file kredensial (biasanya nama file mengandung 'firebase-adminsdk')
-MIGRATE_DIR = os.path.join(BASE_DIR, "migrate")
-json_files = [f for f in os.listdir(MIGRATE_DIR) if f.endswith('.json') and 'firebase-adminsdk' in f]
+# Mencari file JSON di RESOURCE_DIR atau BASE_DIR yang merupakan file kredensial (biasanya nama file mengandung 'firebase-adminsdk')
+json_files = [f for f in os.listdir(RESOURCE_DIR) if f.endswith('.json') and 'firebase-adminsdk' in f]
+if not json_files and RESOURCE_DIR != BASE_DIR:
+    json_files = [f for f in os.listdir(BASE_DIR) if f.endswith('.json') and 'firebase-adminsdk' in f]
 
 if json_files:
-    # Mengambil file JSON pertama yang ditemukan di folder migrate
-    CRED_FILE = os.path.join(MIGRATE_DIR, json_files[0])
+    # Mengambil file JSON pertama yang ditemukan
+    search_dir = RESOURCE_DIR if os.path.exists(os.path.join(RESOURCE_DIR, json_files[0])) else BASE_DIR
+    CRED_FILE = os.path.join(search_dir, json_files[0])
 else:
-    # Fallback ke nama file lama atau default jika tidak ditemukan
-    CRED_FILE = os.path.join(MIGRATE_DIR, "kredensial_firebase.json")
+    # Fallback
+    CRED_FILE = os.path.join(BASE_DIR, "kredensial_firebase.json")
 
 if not firebase_admin._apps:
     try:
@@ -70,8 +78,18 @@ DRIVE_FOLDER_ID = "1sPuG3yZAI-8hlxUX1hKXX3JA4anAVGLo"
 drive_service = None
 
 # Path untuk file OAuth
-CLIENT_SECRET_FILE = os.path.join(BASE_DIR, "migrate", "config_gdrive", "client_secret_566200628496-j4aftfn1hfc7id1c7ju35csr38mnl97m.apps.googleusercontent.com.json")
-TOKEN_FILE = os.path.join(BASE_DIR, "migrate", "token.json")
+client_secret_files = [f for f in os.listdir(RESOURCE_DIR) if f.startswith('client_secret') and f.endswith('.json')]
+if not client_secret_files and RESOURCE_DIR != BASE_DIR:
+    client_secret_files = [f for f in os.listdir(BASE_DIR) if f.startswith('client_secret') and f.endswith('.json')]
+
+if client_secret_files:
+    search_dir = RESOURCE_DIR if os.path.exists(os.path.join(RESOURCE_DIR, client_secret_files[0])) else BASE_DIR
+    CLIENT_SECRET_FILE = os.path.join(search_dir, client_secret_files[0])
+else:
+    CLIENT_SECRET_FILE = os.path.join(BASE_DIR, "client_secret.json")
+
+# token.json selalu di BASE_DIR agar bisa dimodifikasi/disimpan
+TOKEN_FILE = os.path.join(BASE_DIR, "token.json")
 SCOPES = ['https://www.googleapis.com/auth/drive']
 
 try:

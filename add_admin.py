@@ -18,7 +18,13 @@ def add_admin():
     try:
         docs = db.collection('users').where('username', '==', username).get()
         if docs:
-            print(f"User '{username}' sudah ada.")
+            doc_ref = docs[0].reference
+            doc_ref.set({
+                "username": username,
+                "password": hashed_pw,
+                "role": "admin"
+            })
+            print(f"User '{username}' berhasil di-reset dengan password 'admin123'.")
             return
 
         # Tambahkan ke collection 'users'

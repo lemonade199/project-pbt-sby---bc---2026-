@@ -3,6 +3,10 @@ admin/barang.py - Panel Kelola Barang (CRUD) + Foto Produk
 Aplikasi Business Center SMKN 13 Bandung
 """
 
+import sys
+import os as _os
+sys.path.insert(0, _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__))))
+
 import tkinter as tk
 from tkinter import ttk, messagebox, filedialog
 from PIL import Image, ImageTk

@@ -1,0 +1,3617 @@
+﻿commit 2e6b2aed5c8b95a456f3c62e1ee1528273356035
+Author: Tifayatul Husna Azahra <tifayatul.khusna07@gmail.com>
+Date:   Tue May 19 12:52:20 2026 +0700
+
+    a
+
+diff --git a/__pycache__/login_admin.cpython-312.pyc b/__pycache__/login_admin.cpython-312.pyc
+index f2ebb4f..cfa216a 100644
+Binary files a/__pycache__/login_admin.cpython-312.pyc and b/__pycache__/login_admin.cpython-312.pyc differ
+diff --git a/admin/__pycache__/__init__.cpython-312.pyc b/admin/__pycache__/__init__.cpython-312.pyc
+index 9f9cd28..aac2384 100644
+Binary files a/admin/__pycache__/__init__.cpython-312.pyc and b/admin/__pycache__/__init__.cpython-312.pyc differ
+diff --git a/admin/__pycache__/dashboard.cpython-312.pyc b/admin/__pycache__/dashboard.cpython-312.pyc
+index c7206d1..f276f8c 100644
+Binary files a/admin/__pycache__/dashboard.cpython-312.pyc and b/admin/__pycache__/dashboard.cpython-312.pyc differ
+diff --git a/admin/barang.py b/admin/barang.py
+index 5b0b802..c3d08f2 100644
+--- a/admin/barang.py
++++ b/admin/barang.py
+@@ -720,10 +720,15 @@ class UpdateCepatForm(tk.Toplevel):
+         self.combo.bind("<<ComboboxSelected>>", self._on_select_barang)
+ 
+         tk.Label(body, text="Tambah Stok (opsional)", font=("Segoe UI", 10, "bold"), bg=WHITE).pack(anchor="w")
++<<<<<<< HEAD
+         vcmd_uc = _make_digit_validator(self)
+         self.ent_stok = tk.Entry(body, font=("Segoe UI", 11), relief="solid", bd=1,
+                                   bg=LIGHT_GRAY, validate="key", validatecommand=vcmd_uc)
+         self.ent_stok.pack(fill="x", pady=(2, 15), ipady=7)
++=======
++        self.ent_stok = tk.Entry(body, font=("Segoe UI", 11), relief="solid", bd=1, bg=LIGHT_GRAY)
++        self.ent_stok.pack(fill="x", pady=(2, 15), ipady=7)  
++>>>>>>> 0e8bd3a (feat: redesign halaman utama dan login admin)
+ 
+         tk.Label(body, text="Update Foto", font=("Segoe UI", 10, "bold"), bg=WHITE).pack(anchor="w", pady=(0, 4))
+ 
+diff --git a/admin/dashboard.py b/admin/dashboard.py
+index 12dd7fb..f439627 100644
+--- a/admin/dashboard.py
++++ b/admin/dashboard.py
+@@ -1,38 +1,80 @@
+ """
+-admin/dashboard.py - Dashboard utama admin
++admin/dashboard.py - Dashboard Admin (Full Redesign Premium)
+ Aplikasi Business Center SMKN 13 Bandung
++Palet: Dark Green #051F20 ΓåÆ Pale Mint #DAF1DE
+ """
+ 
+ import tkinter as tk
++<<<<<<< HEAD
+ from tkinter import messagebox
+ from db import get_db
+-
+-# ΓöÇΓöÇΓöÇ Palet Warna ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+-PRIMARY    = "#CC0000"
+-PRIMARY_DK = "#A00000"
+-SIDEBAR_BG = "#1A1A2E"
+-SIDEBAR_HV = "#16213E"
+-WHITE      = "#FFFFFF"
+-LIGHT_GRAY = "#F5F5F5"
+-DARK_TEXT  = "#212121"
+-GRAY_TEXT  = "#757575"
+-ACCENT_G   = "#2E7D32"
+-ACCENT_B   = "#1565C0"
+-CARD_COLORS = ["#CC0000", "#1565C0", "#2E7D32", "#6A1B9A"]
+-
+-
++=======
++from tkinter import ttk, messagebox
++import datetime
++from db import execute_query
++>>>>>>> 0e8bd3a (feat: redesign halaman utama dan login admin)
++
++# ΓöÇΓöÇΓöÇ Palet Warna (seragam seluruh aplikasi) ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++C_DARKEST    = "#051F20"
++C_DARK       = "#0B2B26"
++C_MID        = "#163832"
++C_MUTED      = "#235347"
++C_MINT       = "#8EB69B"
++C_PALE       = "#DAF1DE"
++WHITE        = "#FFFFFF"
++BG_MAIN      = "#F4FAF6"
++BORDER_CLR   = "#D1E8D8"
++DARK_TEXT    = "#1A2E22"
++GRAY_TEXT    = "#5C7A68"
++LIGHT_TEXT   = "#9DB8A8"
++
++# Warna kartu statistik
++CARD_COLORS  = [
++    ("#163832", "#DAF1DE"),   # barang      ΓåÆ mid green
++    ("#0B2B26", "#8EB69B"),   # pending     ΓåÆ dark green
++    ("#235347", "#DAF1DE"),   # diterima    ΓåÆ muted
++    ("#6B3A2A", "#F5DDD5"),   # ditolak     ΓåÆ terracotta hangat
++]
++
++SIDEBAR_W    = 220
++
++
++# ΓöÇΓöÇΓöÇ Helper: pill button ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++def _pill(parent, text, command, w=160, h=36, r=18,
++          color=C_MID, hover=C_DARK, fg=WHITE,
++          font=("Segoe UI", 9, "bold")):
++    cv = tk.Canvas(parent, width=w, height=h,
++                   bg=parent["bg"], highlightthickness=0, cursor="hand2")
++    def _draw(fill):
++        cv.delete("all")
++        cv.create_arc(0,0,r*2,h,start=90,extent=180,fill=fill,outline=fill)
++        cv.create_arc(w-r*2,0,w,h,start=270,extent=180,fill=fill,outline=fill)
++        cv.create_rectangle(r,0,w-r,h,fill=fill,outline=fill)
++        cv.create_text(w//2,h//2,text=text,fill=fg,font=font,anchor="center")
++    _draw(color)
++    cv.bind("<Enter>",    lambda e: _draw(hover))
++    cv.bind("<Leave>",    lambda e: _draw(color))
++    cv.bind("<Button-1>", lambda e: command())
++    return cv
++
++
++# ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+ class AdminDashboard(tk.Toplevel):
++
+     def __init__(self, master, admin_data: dict):
+         super().__init__(master)
+-        self.master       = master
+-        self.admin_data   = admin_data
+-        self.active_frame = None
+-        self.sidebar_btns = {}
+-
+-        self.title("Admin Dashboard ΓÇö Business Center SMKN 13")
+-        self.geometry("1060x640")
+-        self.configure(bg=LIGHT_GRAY)
+-        self._center(1060, 640)
++        self.master        = master
++        self.admin_data    = admin_data
++        self.active_frame  = None
++        self.sidebar_btns  = {}
++        self._active_key   = None
++
++        self.title("Admin Dashboard ΓÇö Business Center SMKN 13 Bandung")
++        self.geometry("1120x660")
++        self.minsize(960, 580)
++        self.configure(bg=BG_MAIN)
++        self._center(1120, 660)
++        self._build_styles()
+         self._build_ui()
+         self._show_home()
+         self.grab_set()
+@@ -43,65 +85,185 @@ class AdminDashboard(tk.Toplevel):
+         y = (self.winfo_screenheight() - h) // 2
+         self.geometry(f"{w}x{h}+{x}+{y}")
+ 
+-    # ΓöÇΓöÇ Layout utama ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++    def _build_styles(self):
++        s = ttk.Style()
++        s.theme_use("default")
++        s.configure("Dash.Treeview",
++                    font=("Segoe UI", 9), rowheight=32,
++                    background=WHITE, fieldbackground=WHITE,
++                    foreground=DARK_TEXT, borderwidth=0)
++        s.configure("Dash.Treeview.Heading",
++                    font=("Segoe UI", 9, "bold"),
++                    background=BG_MAIN, foreground=GRAY_TEXT,
++                    relief="flat", borderwidth=0)
++        s.map("Dash.Treeview",
++              background=[("selected", C_PALE)],
++              foreground=[("selected", C_DARKEST)])
++        s.configure("Thin.Vertical.TScrollbar",
++                    gripcount=0, background=C_MINT,
++                    troughcolor=BG_MAIN, borderwidth=0,
++                    arrowsize=0, width=5)
++        s.map("Thin.Vertical.TScrollbar",
++              background=[("active", C_MUTED)])
++
++    # ΓöÇΓöÇ Layout ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+     def _build_ui(self):
+-        # Sidebar
+-        self.sidebar = tk.Frame(self, bg=SIDEBAR_BG, width=210)
+-        self.sidebar.pack(side="left", fill="y")
+-        self.sidebar.pack_propagate(False)
+-
+-        # Logo sidebar
+-        logo_frame = tk.Frame(self.sidebar, bg=PRIMARY, height=80)
+-        logo_frame.pack(fill="x")
+-        logo_frame.pack_propagate(False)
+-        tk.Label(logo_frame, text="≡ƒÅ½  BC Admin", font=("Segoe UI", 13, "bold"),
+-                 bg=PRIMARY, fg=WHITE).pack(expand=True)
+-
+-        tk.Label(self.sidebar, text=f"Halo, {self.admin_data['username']} ≡ƒæï",
+-                 font=("Segoe UI", 9), bg=SIDEBAR_BG, fg="#AAAAAA").pack(pady=(12, 16))
+-
+-        # Menu item
++        self._build_sidebar()
++        self.content_area = tk.Frame(self, bg=BG_MAIN)
++        self.content_area.pack(side="left", fill="both", expand=True)
++
++    # ΓöÇΓöÇ Sidebar ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++    def _build_sidebar(self):
++        sb = tk.Frame(self, bg=C_DARKEST, width=SIDEBAR_W)
++        sb.pack(side="left", fill="y")
++        sb.pack_propagate(False)
++        self.sidebar = sb
++
++        # ΓöÇΓöÇ Logo area
++        logo = tk.Frame(sb, bg=C_DARK, height=72)
++        logo.pack(fill="x")
++        logo.pack_propagate(False)
++
++        logo_inner = tk.Frame(logo, bg=C_DARK)
++        logo_inner.pack(expand=True, fill="both", padx=16)
++        tk.Label(logo_inner, text="≡ƒÅ¬", font=("Segoe UI Emoji", 20),
++                 bg=C_DARK).pack(side="left", pady=16)
++        logo_txt = tk.Frame(logo_inner, bg=C_DARK)
++        logo_txt.pack(side="left", padx=10, fill="y", pady=16)
++        tk.Label(logo_txt, text="BC Admin",
++                 font=("Segoe UI", 11, "bold"),
++                 bg=C_DARK, fg=WHITE, anchor="w").pack(anchor="w")
++        tk.Label(logo_txt, text="SMKN 13 Bandung",
++                 font=("Segoe UI", 7),
++                 bg=C_DARK, fg=C_MINT, anchor="w").pack(anchor="w")
++
++        # ΓöÇΓöÇ User info
++        user_f = tk.Frame(sb, bg=C_DARKEST)
++        user_f.pack(fill="x", padx=14, pady=(16, 4))
++        tk.Frame(user_f, bg=C_MUTED, height=1).pack(fill="x", pady=(0,10))
++
++        avatar_f = tk.Frame(user_f, bg=C_MUTED, width=36, height=36)
++        avatar_f.pack(side="left")
++        avatar_f.pack_propagate(False)
++        tk.Label(avatar_f, text="≡ƒæñ", font=("Segoe UI Emoji", 16),
++                 bg=C_MUTED).pack(expand=True)
++
++        user_info = tk.Frame(user_f, bg=C_DARKEST)
++        user_info.pack(side="left", padx=10, fill="y")
++        tk.Label(user_info,
++                 text=self.admin_data.get("username", "Admin"),
++                 font=("Segoe UI", 9, "bold"),
++                 bg=C_DARKEST, fg=WHITE, anchor="w").pack(anchor="w")
++        tk.Label(user_info,
++                 text=self.admin_data.get("role", "Administrator").title(),
++                 font=("Segoe UI", 7),
++                 bg=C_DARKEST, fg=C_MINT, anchor="w").pack(anchor="w")
++
++        tk.Frame(sb, bg=C_MUTED, height=1).pack(
++            fill="x", padx=14, pady=(12,8))
++
++        # ΓöÇΓöÇ Label navigasi
++        tk.Label(sb, text="N A V I G A S I",
++                 font=("Segoe UI", 7),
++                 bg=C_DARKEST, fg=C_MUTED).pack(anchor="w", padx=18, pady=(0,6))
++
++        # ΓöÇΓöÇ Menu items
+         menus = [
+-            ("≡ƒÅá  Dashboard",        "home"),
+-            ("≡ƒôª  Kelola Barang",    "barang"),
+-            ("≡ƒôï  Konfirmasi Pesanan","konfirmasi"),
++            ("≡ƒÅá", "Dashboard",          "home"),
++            ("≡ƒôª", "Kelola Barang",       "barang"),
++            ("≡ƒôï", "Konfirmasi Pesanan",  "konfirmasi"),
+         ]
+-        for label, key in menus:
+-            btn = tk.Button(
+-                self.sidebar, text=label,
+-                font=("Segoe UI", 10), anchor="w",
+-                bg=SIDEBAR_BG, fg="#CCCCCC",
+-                relief="flat", bd=0,
+-                padx=20, pady=12, cursor="hand2",
+-                activebackground=SIDEBAR_HV, activeforeground=WHITE,
+-                command=lambda k=key: self._navigate(k)
+-            )
+-            btn.pack(fill="x")
+-            self.sidebar_btns[key] = btn
+-
+-        # Divider
+-        tk.Frame(self.sidebar, bg="#333355", height=1).pack(fill="x", pady=10, padx=16)
+-
+-        # Logout
+-        tk.Button(self.sidebar, text="≡ƒÜ¬  Logout",
+-                  font=("Segoe UI", 10), anchor="w",
+-                  bg=SIDEBAR_BG, fg="#FF6B6B",
+-                  relief="flat", bd=0, padx=20, pady=12, cursor="hand2",
+-                  activebackground="#3D0000", activeforeground=WHITE,
+-                  command=self._logout).pack(fill="x", side="bottom", pady=(0, 8))
+-
+-        # Area konten kanan
+-        self.content_area = tk.Frame(self, bg=LIGHT_GRAY)
+-        self.content_area.pack(side="left", fill="both", expand=True)
++        for icon, label, key in menus:
++            self._make_menu_item(sb, icon, label, key)
++
++        # ΓöÇΓöÇ Spacer + Logout di bawah
++        tk.Frame(sb, bg=C_DARKEST).pack(fill="both", expand=True)
++        tk.Frame(sb, bg=C_MUTED, height=1).pack(fill="x", padx=14, pady=8)
++
++        logout_f = tk.Frame(sb, bg=C_DARKEST, cursor="hand2")
++        logout_f.pack(fill="x", padx=14, pady=(0,16))
++        logout_f.bind("<Button-1>", lambda e: self._logout())
++
++        for widget_side, widget_text, widget_font, widget_fg in [
++            ("left", "≡ƒÜ¬", ("Segoe UI Emoji", 14), "#FF8A80"),
++            ("left", "  Logout", ("Segoe UI", 9, "bold"), "#FF8A80"),
++        ]:
++            lbl = tk.Label(logout_f, text=widget_text,
++                           font=widget_font,
++                           bg=C_DARKEST, fg=widget_fg)
++            lbl.pack(side=widget_side, pady=10)
++            lbl.bind("<Button-1>", lambda e: self._logout())
++            lbl.bind("<Enter>", lambda e, f=logout_f: f.config(bg="#1A0808") or
++                     [w.config(bg="#1A0808") for w in f.winfo_children()])
++            lbl.bind("<Leave>", lambda e, f=logout_f: f.config(bg=C_DARKEST) or
++                     [w.config(bg=C_DARKEST) for w in f.winfo_children()])
++
++    def _make_menu_item(self, parent, icon, label, key):
++        """Buat item menu sidebar dengan efek aktif dan hover."""
++        item_f = tk.Frame(parent, bg=C_DARKEST, cursor="hand2", height=44)
++        item_f.pack(fill="x", padx=10, pady=2)
++        item_f.pack_propagate(False)
++
++        # Aksen kiri (indikator aktif)
++        accent = tk.Frame(item_f, bg=C_DARKEST, width=4)
++        accent.pack(side="left", fill="y")
++
++        icon_lbl = tk.Label(item_f, text=icon,
++                            font=("Segoe UI Emoji", 13),
++                            bg=C_DARKEST, fg=LIGHT_TEXT)
++        icon_lbl.pack(side="left", padx=(8,6))
++
++        text_lbl = tk.Label(item_f, text=label,
++                            font=("Segoe UI", 9),
++                            bg=C_DARKEST, fg=LIGHT_TEXT, anchor="w")
++        text_lbl.pack(side="left", fill="x", expand=True)
++
++        def _enter(e):
++            if self._active_key != key:
++                for w in [item_f, icon_lbl, text_lbl]:
++                    w.config(bg=C_DARK)
++                accent.config(bg=C_DARK)
++
++        def _leave(e):
++            if self._active_key != key:
++                for w in [item_f, icon_lbl, text_lbl]:
++                    w.config(bg=C_DARKEST)
++                accent.config(bg=C_DARKEST)
++
++        def _click(e=None):
++            self._navigate(key)
++
++        for w in [item_f, icon_lbl, text_lbl]:
++            w.bind("<Enter>",    _enter)
++            w.bind("<Leave>",    _leave)
++            w.bind("<Button-1>", _click)
++
++        self.sidebar_btns[key] = {
++            "frame": item_f, "accent": accent,
++            "icon": icon_lbl, "text": text_lbl
++        }
++
++    def _set_active_menu(self, key):
++        self._active_key = key
++        for k, widgets in self.sidebar_btns.items():
++            if k == key:
++                widgets["frame"].config(bg=C_MID)
++                widgets["accent"].config(bg=C_MINT)
++                widgets["icon"].config(bg=C_MID, fg=WHITE)
++                widgets["text"].config(bg=C_MID, fg=WHITE,
++                                       font=("Segoe UI", 9, "bold"))
++            else:
++                widgets["frame"].config(bg=C_DARKEST)
++                widgets["accent"].config(bg=C_DARKEST)
++                widgets["icon"].config(bg=C_DARKEST, fg=LIGHT_TEXT)
++                widgets["text"].config(bg=C_DARKEST, fg=LIGHT_TEXT,
++                                       font=("Segoe UI", 9))
+ 
+     # ΓöÇΓöÇ Navigasi ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+     def _navigate(self, key: str):
+-        for k, btn in self.sidebar_btns.items():
+-            btn.config(bg=PRIMARY if k == key else SIDEBAR_BG,
+-                       fg=WHITE   if k == key else "#CCCCCC")
++        self._set_active_menu(key)
+         if self.active_frame:
+             self.active_frame.destroy()
+-
+         if key == "home":
+             self._show_home()
+         elif key == "barang":
+@@ -110,9 +272,7 @@ class AdminDashboard(tk.Toplevel):
+             self._show_konfirmasi()
+ 
+     def _show_home(self):
+-        for k, btn in self.sidebar_btns.items():
+-            btn.config(bg=PRIMARY if k == "home" else SIDEBAR_BG,
+-                       fg=WHITE   if k == "home" else "#CCCCCC")
++        self._set_active_menu("home")
+         if self.active_frame:
+             self.active_frame.destroy()
+         self.active_frame = HomeDashboard(self.content_area, self)
+@@ -133,85 +293,164 @@ class AdminDashboard(tk.Toplevel):
+         self.active_frame.pack(fill="both", expand=True)
+ 
+     def _logout(self):
+-        if messagebox.askyesno("Logout", "Yakin ingin keluar dari dashboard admin?", parent=self):
++        if messagebox.askyesno("Logout",
++                               "Yakin ingin keluar dari dashboard admin?",
++                               parent=self):
+             self.destroy()
+             self.master.deiconify()
+ 
+ 
+-# ΓöÇΓöÇΓöÇ Halaman Home Dashboard ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++# ΓöÇΓöÇΓöÇ Halaman Home ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+ class HomeDashboard(tk.Frame):
++
+     def __init__(self, parent, dashboard):
+-        super().__init__(parent, bg=LIGHT_GRAY)
++        super().__init__(parent, bg=BG_MAIN)
+         self.dashboard = dashboard
+         self._build()
+ 
+     def _build(self):
+-        # Header
+-        hdr = tk.Frame(self, bg=WHITE, height=60)
+-        hdr.pack(fill="x", padx=0, pady=0)
+-        hdr.pack_propagate(False)
+-        tk.Label(hdr, text="Dashboard", font=("Segoe UI", 16, "bold"),
+-                 bg=WHITE, fg=DARK_TEXT).pack(side="left", padx=24, pady=14)
+-
+-        import datetime
+-        now = datetime.datetime.now().strftime("%A, %d %B %Y")
+-        tk.Label(hdr, text=now, font=("Segoe UI", 9),
+-                 bg=WHITE, fg=GRAY_TEXT).pack(side="right", padx=24)
+-
+-        # Statistik cards
+-        stats_frame = tk.Frame(self, bg=LIGHT_GRAY)
+-        stats_frame.pack(fill="x", padx=20, pady=20)
++        # ΓöÇΓöÇ Top bar ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++        topbar = tk.Frame(self, bg=WHITE, height=64)
++        topbar.pack(fill="x")
++        topbar.pack_propagate(False)
++
++        # Garis aksen kiri
++        tk.Frame(topbar, bg=C_MID, width=4).pack(side="left", fill="y")
++
++        title_col = tk.Frame(topbar, bg=WHITE)
++        title_col.pack(side="left", padx=20, fill="y", pady=12)
++        tk.Label(title_col, text="Dashboard",
++                 font=("Segoe UI", 14, "bold"),
++                 bg=WHITE, fg=DARK_TEXT, anchor="w").pack(anchor="w")
++        tk.Label(title_col,
++                 text=datetime.datetime.now().strftime("%A, %d %B %Y"),
++                 font=("Segoe UI", 8),
++                 bg=WHITE, fg=GRAY_TEXT, anchor="w").pack(anchor="w")
++
++        # Refresh button kanan
++        btn_ref = _pill(topbar, text="Γå╗  Refresh", command=self._refresh,
++                        w=100, h=32, r=16,
++                        color=C_PALE, hover=C_MINT, fg=C_MID,
++                        font=("Segoe UI", 8, "bold"))
++        btn_ref.config(bg=WHITE)
++        btn_ref.pack(side="right", padx=20, pady=16)
+ 
++        # Divider
++        tk.Frame(self, bg=BORDER_CLR, height=1).pack(fill="x")
++
++        # ΓöÇΓöÇ Scrollable content ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++        canvas = tk.Canvas(self, bg=BG_MAIN, highlightthickness=0)
++        vsb    = ttk.Scrollbar(self, orient="vertical",
++                               command=canvas.yview,
++                               style="Thin.Vertical.TScrollbar")
++        canvas.configure(yscrollcommand=vsb.set)
++        vsb.pack(side="right", fill="y")
++        canvas.pack(side="left", fill="both", expand=True)
++
++        self.scroll_frame = tk.Frame(canvas, bg=BG_MAIN)
++        win = canvas.create_window((0,0), window=self.scroll_frame, anchor="nw")
++        self.scroll_frame.bind("<Configure>", lambda e:
++            canvas.configure(scrollregion=canvas.bbox("all")))
++        canvas.bind("<Configure>", lambda e:
++            canvas.itemconfig(win, width=e.width))
++        canvas.bind_all("<MouseWheel>", lambda e:
++            canvas.yview_scroll(int(-1*(e.delta/120)), "units"))
++
++        self._build_content(self.scroll_frame)
++
++    def _build_content(self, parent):
++        # ΓöÇΓöÇ Stat cards ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+         stats = self._get_stats()
+         cards_data = [
+-            ("≡ƒôª", "Total Barang",      str(stats["barang"]),    CARD_COLORS[0]),
+-            ("ΓÅ│", "Pesanan Pending",   str(stats["pending"]),   CARD_COLORS[1]),
+-            ("Γ£à", "Pesanan Diterima", str(stats["diterima"]),   CARD_COLORS[2]),
+-            ("Γ¥î", "Pesanan Ditolak",  str(stats["ditolak"]),    CARD_COLORS[3]),
++            ("≡ƒôª", "Total Barang",     stats["barang"],   CARD_COLORS[0]),
++            ("ΓÅ│", "Pesanan Pending",  stats["pending"],  CARD_COLORS[1]),
++            ("Γ£à", "Pesanan Diterima", stats["diterima"], CARD_COLORS[2]),
++            ("Γ¥î", "Pesanan Ditolak",  stats["ditolak"],  CARD_COLORS[3]),
+         ]
+-        for i, (icon, label, value, color) in enumerate(cards_data):
+-            self._make_stat_card(stats_frame, icon, label, value, color, col=i)
+-
+-        # Akses cepat
+-        quick = tk.Frame(self, bg=WHITE, relief="flat")
+-        quick.pack(fill="x", padx=20, pady=(0, 20))
+-        tk.Label(quick, text="Akses Cepat", font=("Segoe UI", 12, "bold"),
+-                 bg=WHITE, fg=DARK_TEXT).pack(anchor="w", padx=16, pady=(14, 10))
+-
+-        btn_row = tk.Frame(quick, bg=WHITE)
+-        btn_row.pack(padx=16, pady=(0, 16), anchor="w")
+-
+-        tk.Button(btn_row, text="Γ₧ò  Tambah Barang", font=("Segoe UI", 10, "bold"),
+-                  bg=PRIMARY, fg=WHITE, relief="flat", padx=16, pady=8, cursor="hand2",
+-                  command=lambda: self.dashboard._navigate("barang")).pack(side="left", padx=(0, 10))
+-        tk.Button(btn_row, text="≡ƒôï  Lihat Pesanan Pending", font=("Segoe UI", 10, "bold"),
+-                  bg=ACCENT_B, fg=WHITE, relief="flat", padx=16, pady=8, cursor="hand2",
+-                  command=lambda: self.dashboard._navigate("konfirmasi")).pack(side="left")
+-
+-        # Tabel pesanan terbaru
+-        recent_frame = tk.Frame(self, bg=WHITE)
+-        recent_frame.pack(fill="both", expand=True, padx=20, pady=(0, 20))
+-        tk.Label(recent_frame, text="Pesanan Terbaru", font=("Segoe UI", 12, "bold"),
+-                 bg=WHITE, fg=DARK_TEXT).pack(anchor="w", padx=16, pady=(14, 8))
+-
+-        self._build_recent_table(recent_frame)
+-
+-    def _make_stat_card(self, parent, icon, label, value, color, col):
+-        card = tk.Frame(parent, bg=color, height=110, relief="flat")
+-        card.grid(row=0, column=col, padx=8, sticky="ew")
+-        card.grid_columnconfigure(0, weight=1)
+-        parent.grid_columnconfigure(col, weight=1)
++
++        stat_wrap = tk.Frame(parent, bg=BG_MAIN)
++        stat_wrap.pack(fill="x", padx=20, pady=20)
++
++        for i, (icon, label, value, (bg, fg_accent)) in enumerate(cards_data):
++            self._make_stat_card(stat_wrap, icon, label, value, bg, fg_accent, col=i)
++            stat_wrap.grid_columnconfigure(i, weight=1, uniform="card")
++
++        # ΓöÇΓöÇ Akses cepat ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++        quick_wrap = tk.Frame(parent, bg=WHITE,
++                              highlightbackground=BORDER_CLR,
++                              highlightthickness=1)
++        quick_wrap.pack(fill="x", padx=20, pady=(0,16))
++
++        q_hdr = tk.Frame(quick_wrap, bg=WHITE)
++        q_hdr.pack(fill="x", padx=16, pady=(14,10))
++        tk.Frame(q_hdr, bg=C_MID, width=4, height=18).pack(side="left")
++        tk.Label(q_hdr, text="  Akses Cepat",
++                 font=("Segoe UI", 11, "bold"),
++                 bg=WHITE, fg=DARK_TEXT).pack(side="left")
++
++        btn_row = tk.Frame(quick_wrap, bg=WHITE)
++        btn_row.pack(padx=16, pady=(0,16), anchor="w")
++
++        b1 = _pill(btn_row, text="Γ₧ò  Tambah Barang",
++                   command=lambda: self.dashboard._navigate("barang"),
++                   w=180, h=38, r=19,
++                   color=C_MID, hover=C_DARK,
++                   font=("Segoe UI", 9, "bold"))
++        b1.config(bg=WHITE)
++        b1.pack(side="left", padx=(0,12))
++
++        b2 = _pill(btn_row, text="≡ƒôï  Pesanan Pending",
++                   command=lambda: self.dashboard._navigate("konfirmasi"),
++                   w=190, h=38, r=19,
++                   color=C_MUTED, hover=C_MID,
++                   font=("Segoe UI", 9, "bold"))
++        b2.config(bg=WHITE)
++        b2.pack(side="left")
++
++        # ΓöÇΓöÇ Pesanan terbaru ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++        recent_wrap = tk.Frame(parent, bg=WHITE,
++                               highlightbackground=BORDER_CLR,
++                               highlightthickness=1)
++        recent_wrap.pack(fill="both", expand=True, padx=20, pady=(0,20))
++
++        r_hdr = tk.Frame(recent_wrap, bg=WHITE)
++        r_hdr.pack(fill="x", padx=16, pady=(14,8))
++        tk.Frame(r_hdr, bg=C_MID, width=4, height=18).pack(side="left")
++        tk.Label(r_hdr, text="  Pesanan Terbaru",
++                 font=("Segoe UI", 11, "bold"),
++                 bg=WHITE, fg=DARK_TEXT).pack(side="left")
++
++        self._build_recent_table(recent_wrap)
++
++    def _make_stat_card(self, parent, icon, label, value, bg, fg_accent, col):
++        card = tk.Frame(parent, bg=bg, height=120)
++        card.grid(row=0, column=col, padx=(0 if col==0 else 8, 0), sticky="ew")
+         card.pack_propagate(False)
+ 
+-        tk.Label(card, text=icon, font=("Segoe UI", 22),
+-                 bg=color, fg=WHITE).pack(pady=(14, 2))
+-        tk.Label(card, text=value, font=("Segoe UI", 20, "bold"),
+-                 bg=color, fg=WHITE).pack()
+-        tk.Label(card, text=label, font=("Segoe UI", 9),
+-                 bg=color, fg="#FFDDDD").pack()
++        inner = tk.Frame(card, bg=bg)
++        inner.pack(expand=True, fill="both", padx=18, pady=14)
++
++        # Baris atas: nilai + ikon
++        top = tk.Frame(inner, bg=bg)
++        top.pack(fill="x")
++        tk.Label(top, text=str(value),
++                 font=("Segoe UI", 26, "bold"),
++                 bg=bg, fg=WHITE).pack(side="left")
++        tk.Label(top, text=icon,
++                 font=("Segoe UI Emoji", 22),
++                 bg=bg, fg=fg_accent).pack(side="right")
++
++        # Label bawah
++        tk.Label(inner, text=label,
++                 font=("Segoe UI", 9),
++                 bg=bg, fg=fg_accent, anchor="w").pack(anchor="w", pady=(4,0))
++
++        # Garis bawah aksen
++        tk.Frame(card, bg=fg_accent, height=3).pack(fill="x", side="bottom")
+ 
+     def _get_stats(self) -> dict:
+         try:
++<<<<<<< HEAD
+             db = get_db()
+             # In Firestore, getting counts can be done with count() queries if supported,
+             # or by retrieving the snapshot length.
+@@ -229,40 +468,44 @@ class HomeDashboard(tk.Frame):
+         except Exception as e:
+             print(f"Error _get_stats: {e}")
+             return {"barang": 0, "pending": 0, "diterima": 0, "ditolak": 0}
++=======
++            return {
++                "barang":   execute_query("SELECT COUNT(*) AS c FROM barang", fetch=True)[0]["c"],
++                "pending":  execute_query("SELECT COUNT(*) AS c FROM pesanan WHERE status='pending'", fetch=True)[0]["c"],
++                "diterima": execute_query("SELECT COUNT(*) AS c FROM pesanan WHERE status='diterima'", fetch=True)[0]["c"],
++                "ditolak":  execute_query("SELECT COUNT(*) AS c FROM pesanan WHERE status='ditolak'", fetch=True)[0]["c"],
++            }
++        except Exception:
++            return {"barang":0, "pending":0, "diterima":0, "ditolak":0}
++>>>>>>> 0e8bd3a (feat: redesign halaman utama dan login admin)
+ 
+     def _build_recent_table(self, parent):
+-        import tkinter.ttk as ttk
+-
+-        style = ttk.Style()
+-        style.theme_use("default")
+-        style.configure("Recent.Treeview",
+-                        font=("Segoe UI", 9), rowheight=28,
+-                        background=WHITE, fieldbackground=WHITE,
+-                        foreground=DARK_TEXT)
+-        style.configure("Recent.Treeview.Heading",
+-                        font=("Segoe UI", 9, "bold"),
+-                        background=PRIMARY, foreground=WHITE)
+-        style.map("Recent.Treeview", background=[("selected", "#FFE0E0")])
+-
+         cols = ("ID", "Tanggal", "Total", "Status")
+         tv   = ttk.Treeview(parent, columns=cols, show="headings",
+-                            style="Recent.Treeview", height=6)
++                            style="Dash.Treeview", height=7)
+         tv.heading("ID",      text="ID Pesanan")
+-        tv.heading("Tanggal", text="Tanggal")
++        tv.heading("Tanggal", text="Tanggal & Waktu")
+         tv.heading("Total",   text="Total Harga")
+         tv.heading("Status",  text="Status")
+-
+         tv.column("ID",      width=90,  anchor="center")
+-        tv.column("Tanggal", width=160, anchor="center")
+-        tv.column("Total",   width=130, anchor="e")
+-        tv.column("Status",  width=100, anchor="center")
++        tv.column("Tanggal", width=200, anchor="center")
++        tv.column("Total",   width=140, anchor="e")
++        tv.column("Status",  width=110, anchor="center")
+ 
+-        sb = ttk.Scrollbar(parent, orient="vertical", command=tv.yview)
++        sb = ttk.Scrollbar(parent, orient="vertical",
++                           command=tv.yview,
++                           style="Thin.Vertical.TScrollbar")
+         tv.configure(yscrollcommand=sb.set)
+-        sb.pack(side="right", fill="y", padx=(0, 16))
+-        tv.pack(fill="both", expand=True, padx=16, pady=(0, 16))
++        sb.pack(side="right", fill="y", padx=(0,16), pady=(0,16))
++        tv.pack(fill="both", expand=True, padx=16, pady=(0,16))
++
++        # Tag warna baris status
++        tv.tag_configure("pending",  background="#FFF8E1", foreground="#7A5800")
++        tv.tag_configure("diterima", background="#F0FAF4", foreground="#163832")
++        tv.tag_configure("ditolak",  background="#FFF0F0", foreground="#8B1A1A")
+ 
+         try:
++<<<<<<< HEAD
+             from firebase_admin import firestore
+             db = get_db()
+             docs = db.collection('pesanan').order_by('tanggal', direction=firestore.Query.DESCENDING).limit(10).stream()
+@@ -272,4 +515,28 @@ class HomeDashboard(tk.Frame):
+                 total = f"Rp {r.get('total_harga', 0):,.0f}"
+                 tv.insert("", "end", values=(doc.id[:8], r.get("tanggal", ""), total, r.get("status", "").upper()))
+         except Exception as e:
+-            print(f"Error recent_table: {e}")
+\ No newline at end of file
++            print(f"Error recent_table: {e}")
++=======
++            rows = execute_query(
++                "SELECT id_pesanan, tanggal, total_harga, status "
++                "FROM pesanan ORDER BY tanggal DESC LIMIT 10",
++                fetch=True)
++            for r in rows:
++                status = r["status"]
++                total  = f"Rp {r['total_harga']:,.0f}"
++                label  = {"pending":"ΓÅ│ Pending",
++                          "diterima":"Γ£à Diterima",
++                          "ditolak":"Γ¥î Ditolak"}.get(status, status.upper())
++                tv.insert("", "end",
++                          values=(f"#{r['id_pesanan']}", r["tanggal"],
++                                  total, label),
++                          tags=(status,))
++        except Exception:
++            pass
++
++    def _refresh(self):
++        # Rebuild konten
++        for w in self.scroll_frame.winfo_children():
++            w.destroy()
++        self._build_content(self.scroll_frame)
++>>>>>>> 0e8bd3a (feat: redesign halaman utama dan login admin)
+diff --git a/admin/konfirmasi.py b/admin/konfirmasi.py
+index e8aab5a..ced6891 100644
+--- a/admin/konfirmasi.py
++++ b/admin/konfirmasi.py
+@@ -1,39 +1,90 @@
+ """
+-admin/konfirmasi.py - Panel Konfirmasi Pesanan (Terima / Tolak)
++admin/konfirmasi.py - Panel Konfirmasi Pesanan (Redesign Premium)
+ Aplikasi Business Center SMKN 13 Bandung
++Palet: Dark Green #051F20 ΓåÆ Pale Mint #DAF1DE
+ """
+ 
+ import tkinter as tk
+ from tkinter import ttk, messagebox
+ from db import get_db
+ 
+-PRIMARY    = "#CC0000"
+-PRIMARY_DK = "#A00000"
+-WHITE      = "#FFFFFF"
+-LIGHT_GRAY = "#F5F5F5"
+-DARK_TEXT  = "#212121"
+-GRAY_TEXT  = "#757575"
+-ACCENT_G   = "#2E7D32"
+-ACCENT_G_DK= "#1B5E20"
+-ACCENT_B   = "#1565C0"
+-ROW_ALT    = "#FFF5F5"
+-
+-STATUS_COLOR = {
+-    "pending":  "#E65100",
+-    "diterima": "#2E7D32",
+-    "ditolak":  "#B71C1C",
+-}
+-
+-
++# ΓöÇΓöÇΓöÇ Palet Warna (seragam seluruh aplikasi) ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++C_DARKEST   = "#051F20"
++C_DARK      = "#0B2B26"
++C_MID       = "#163832"
++C_MUTED     = "#235347"
++C_MINT      = "#8EB69B"
++C_PALE      = "#DAF1DE"
++WHITE       = "#FFFFFF"
++BG_MAIN     = "#F4FAF6"
++BORDER_CLR  = "#D1E8D8"
++DARK_TEXT   = "#1A2E22"
++GRAY_TEXT   = "#5C7A68"
++LIGHT_TEXT  = "#9DB8A8"
++
++# Status colors
++S_PENDING   = "#C07A00"   # amber
++S_DITERIMA  = "#163832"   # hijau gelap
++S_DITOLAK   = "#8B1A1A"   # merah gelap
++
++S_BG_PENDING  = "#FFF8E1"
++S_BG_DITERIMA = "#F0FAF4"
++S_BG_DITOLAK  = "#FFF0F0"
++
++BTN_ACCEPT  = "#163832"
++BTN_ACCEPT_H= "#0B2B26"
++BTN_REJECT  = "#7A2020"
++BTN_REJECT_H= "#5C1515"
++
++
++# ΓöÇΓöÇΓöÇ Helper: pill button ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++def _pill(parent, text, command, w=150, h=38, r=19,
++          color=C_MID, hover=C_DARK, fg=WHITE,
++          font=("Segoe UI", 9, "bold")):
++    cv = tk.Canvas(parent, width=w, height=h,
++                   bg=parent["bg"], highlightthickness=0, cursor="hand2")
++    def _draw(fill):
++        cv.delete("all")
++        cv.create_arc(0,0,r*2,h,start=90,extent=180,fill=fill,outline=fill)
++        cv.create_arc(w-r*2,0,w,h,start=270,extent=180,fill=fill,outline=fill)
++        cv.create_rectangle(r,0,w-r,h,fill=fill,outline=fill)
++        cv.create_text(w//2,h//2,text=text,fill=fg,font=font,anchor="center")
++    _draw(color)
++    cv.bind("<Enter>",    lambda e: _draw(hover))
++    cv.bind("<Leave>",    lambda e: _draw(color))
++    cv.bind("<Button-1>", lambda e: command())
++    return cv
++
++
++def _pill_disabled(parent, text, w=150, h=38, r=19,
++                   font=("Segoe UI", 9, "bold")):
++    """Pill non-interaktif untuk state disabled."""
++    cv = tk.Canvas(parent, width=w, height=h,
++                   bg=parent["bg"], highlightthickness=0)
++    cv.create_arc(0,0,r*2,h,start=90,extent=180,fill=BORDER_CLR,outline=BORDER_CLR)
++    cv.create_arc(w-r*2,0,w,h,start=270,extent=180,fill=BORDER_CLR,outline=BORDER_CLR)
++    cv.create_rectangle(r,0,w-r,h,fill=BORDER_CLR,outline=BORDER_CLR)
++    cv.create_text(w//2,h//2,text=text,fill=LIGHT_TEXT,font=font,anchor="center")
++    return cv
++
++
++# ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+ class KonfirmasiPanel(tk.Frame):
++
+     def __init__(self, parent, dashboard):
+-        super().__init__(parent, bg=LIGHT_GRAY)
+-        self.dashboard    = dashboard
+-        self.selected_id  = None
+-        self._filter_val  = "semua"
++        super().__init__(parent, bg=BG_MAIN)
++        self.dashboard   = dashboard
++        self.selected_id = None
++        self._filter_val = "semua"
++        self._btn_terima_cv  = None
++        self._btn_tolak_cv   = None
++        self._btn_terima_dis = None
++        self._btn_tolak_dis  = None
++        self._build_styles()
+         self._build()
+         self._load_pesanan()
+ 
++<<<<<<< HEAD
+     # ΓöÇΓöÇ Layout ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+     def _build(self):
+         # Header
+@@ -48,128 +99,254 @@ class KonfirmasiPanel(tk.Frame):
+         tk.Button(hdr, text="≡ƒùæ  Hapus Semua Histori", font=("Segoe UI", 9, "bold"),
+                   bg="#B71C1C", fg=WHITE, relief="flat", padx=10, pady=5,
+                   cursor="hand2", command=self._hapus_semua_histori).pack(side="right", padx=(16, 4))
+-
+-        # Filter tabs
+-        tab_bar = tk.Frame(self, bg=WHITE)
+-        tab_bar.pack(fill="x", padx=20, pady=(8, 0))
++=======
++    def _build_styles(self):
++        s = ttk.Style()
++        s.theme_use("default")
++>>>>>>> 0e8bd3a (feat: redesign halaman utama dan login admin)
++
++        # Treeview pesanan
++        s.configure("Pesanan.Treeview",
++                    font=("Segoe UI", 9), rowheight=32,
++                    background=WHITE, fieldbackground=WHITE,
++                    foreground=DARK_TEXT, borderwidth=0)
++        s.configure("Pesanan.Treeview.Heading",
++                    font=("Segoe UI", 9, "bold"),
++                    background=BG_MAIN, foreground=GRAY_TEXT,
++                    relief="flat", borderwidth=0)
++        s.map("Pesanan.Treeview",
++              background=[("selected", C_PALE)],
++              foreground=[("selected", C_DARKEST)])
++
++        # Treeview detail
++        s.configure("Detail.Treeview",
++                    font=("Segoe UI", 9), rowheight=30,
++                    background=WHITE, fieldbackground=WHITE,
++                    foreground=DARK_TEXT, borderwidth=0)
++        s.configure("Detail.Treeview.Heading",
++                    font=("Segoe UI", 8, "bold"),
++                    background=BG_MAIN, foreground=GRAY_TEXT,
++                    relief="flat", borderwidth=0)
++        s.map("Detail.Treeview",
++              background=[("selected", C_PALE)])
++
++        # Scrollbar tipis
++        s.configure("Thin.Vertical.TScrollbar",
++                    gripcount=0, background=C_MINT,
++                    troughcolor=BG_MAIN, borderwidth=0,
++                    arrowsize=0, width=5)
++        s.map("Thin.Vertical.TScrollbar",
++              background=[("active", C_MUTED)])
++
++    # ΓöÇΓöÇ Build UI ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++    def _build(self):
++        self._build_topbar()
++        self._build_filter_tabs()
++        tk.Frame(self, bg=BORDER_CLR, height=1).pack(fill="x")
++        self._build_body()
++
++    def _build_topbar(self):
++        topbar = tk.Frame(self, bg=WHITE, height=64)
++        topbar.pack(fill="x")
++        topbar.pack_propagate(False)
++
++        # Aksen kiri
++        tk.Frame(topbar, bg=C_MID, width=4).pack(side="left", fill="y")
++
++        title_col = tk.Frame(topbar, bg=WHITE)
++        title_col.pack(side="left", padx=20, fill="y", pady=12)
++        tk.Label(title_col, text="Konfirmasi Pesanan",
++                 font=("Segoe UI", 14, "bold"),
++                 bg=WHITE, fg=DARK_TEXT, anchor="w").pack(anchor="w")
++        tk.Label(title_col, text="Terima atau tolak pesanan dari pelanggan",
++                 font=("Segoe UI", 8),
++                 bg=WHITE, fg=GRAY_TEXT, anchor="w").pack(anchor="w")
++
++        btn_ref = _pill(topbar, text="Γå╗  Refresh", command=self._refresh,
++                        w=100, h=32, r=16,
++                        color=C_PALE, hover=C_MINT, fg=C_MID,
++                        font=("Segoe UI", 8, "bold"))
++        btn_ref.config(bg=WHITE)
++        btn_ref.pack(side="right", padx=20, pady=16)
++
++    def _build_filter_tabs(self):
++        tab_wrap = tk.Frame(self, bg=WHITE)
++        tab_wrap.pack(fill="x", padx=20, pady=(10,0))
+ 
+         self.filter_btns = {}
+-        filters = [("Semua", "semua"), ("ΓÅ│ Pending", "pending"),
+-                   ("Γ£à Diterima", "diterima"), ("Γ¥î Ditolak", "ditolak")]
++        filters = [
++            ("Semua",        "semua"),
++            ("ΓÅ│  Pending",  "pending"),
++            ("Γ£à  Diterima", "diterima"),
++            ("Γ¥î  Ditolak",  "ditolak"),
++        ]
+         for label, key in filters:
+-            btn = tk.Button(tab_bar, text=label, font=("Segoe UI", 9, "bold"),
+-                            relief="flat", padx=12, pady=7, cursor="hand2",
+-                            command=lambda k=key: self._set_filter(k))
+-            btn.pack(side="left", padx=(0, 4))
++            btn = tk.Label(tab_wrap, text=label,
++                           font=("Segoe UI", 9, "bold"),
++                           bg=WHITE, fg=LIGHT_TEXT,
++                           padx=14, pady=8, cursor="hand2")
++            btn.pack(side="left")
++            btn.bind("<Button-1>", lambda e, k=key: self._set_filter(k))
+             self.filter_btns[key] = btn
++
+         self._set_filter("semua", init=True)
+ 
+-        # Splitter: kiri = daftar pesanan, kanan = detail
+-        paned = tk.PanedWindow(self, orient="horizontal",
+-                               bg=LIGHT_GRAY, sashwidth=6, sashrelief="flat")
+-        paned.pack(fill="both", expand=True, padx=20, pady=12)
+-
+-        # ΓöÇΓöÇ Panel kiri: tabel pesanan ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+-        left_panel = tk.Frame(paned, bg=WHITE)
+-        paned.add(left_panel, minsize=380)
+-
+-        style = ttk.Style()
+-        style.theme_use("default")
+-        style.configure("Pesanan.Treeview",
+-                        font=("Segoe UI", 9), rowheight=30,
+-                        background=WHITE, fieldbackground=WHITE, foreground=DARK_TEXT)
+-        style.configure("Pesanan.Treeview.Heading",
+-                        font=("Segoe UI", 9, "bold"),
+-                        background=PRIMARY, foreground=WHITE, relief="flat")
+-        style.map("Pesanan.Treeview",
+-                  background=[("selected", "#FFD6D6")],
+-                  foreground=[("selected", DARK_TEXT)])
++    def _build_body(self):
++        body = tk.Frame(self, bg=BG_MAIN)
++        body.pack(fill="both", expand=True, padx=16, pady=12)
++
++        # ΓöÇΓöÇ Panel kiri: daftar pesanan ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++        left = tk.Frame(body, bg=WHITE,
++                        highlightbackground=BORDER_CLR,
++                        highlightthickness=1)
++        left.pack(side="left", fill="both", expand=True, padx=(0,8))
++
++        # Sub-header kiri
++        l_hdr = tk.Frame(left, bg=WHITE)
++        l_hdr.pack(fill="x", padx=14, pady=(12,8))
++        tk.Frame(l_hdr, bg=C_MID, width=4, height=16).pack(side="left")
++        tk.Label(l_hdr, text="  Daftar Pesanan",
++                 font=("Segoe UI", 10, "bold"),
++                 bg=WHITE, fg=DARK_TEXT).pack(side="left")
++        self.lbl_count = tk.Label(l_hdr, text="",
++                                   font=("Segoe UI", 8),
++                                   bg=WHITE, fg=GRAY_TEXT)
++        self.lbl_count.pack(side="left", padx=6)
++
++        tk.Frame(left, bg=BORDER_CLR, height=1).pack(fill="x")
++
++        # Treeview
++        tree_wrap = tk.Frame(left, bg=WHITE)
++        tree_wrap.pack(fill="both", expand=True)
+ 
+         cols = ("ID", "Tanggal", "Total", "Status")
+-        self.tree = ttk.Treeview(left_panel, columns=cols,
+-                                  show="headings", style="Pesanan.Treeview")
++        self.tree = ttk.Treeview(tree_wrap, columns=cols,
++                                  show="headings", style="Pesanan.Treeview",
++                                  selectmode="browse")
+         self.tree.heading("ID",      text="ID")
+         self.tree.heading("Tanggal", text="Tanggal & Jam")
+         self.tree.heading("Total",   text="Total Harga")
+         self.tree.heading("Status",  text="Status")
+-
+-        self.tree.column("ID",      width=55,  anchor="center")
+-        self.tree.column("Tanggal", width=160, anchor="center")
+-        self.tree.column("Total",   width=120, anchor="e")
+-        self.tree.column("Status",  width=90,  anchor="center")
+-
+-        sb_left = ttk.Scrollbar(left_panel, orient="vertical", command=self.tree.yview)
+-        self.tree.configure(yscrollcommand=sb_left.set)
+-        sb_left.pack(side="right", fill="y")
+-        self.tree.pack(fill="both", expand=True, padx=(8, 0), pady=8)
+-        self.tree.bind("<<TreeviewSelect>>", self._on_pesanan_select)
+-
+-        # ΓöÇΓöÇ Panel kanan: detail pesanan + aksi ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+-        right_panel = tk.Frame(paned, bg=LIGHT_GRAY)
+-        paned.add(right_panel, minsize=260)
++        self.tree.column("ID",      width=52,  anchor="center", stretch=False)
++        self.tree.column("Tanggal", width=165, anchor="center")
++        self.tree.column("Total",   width=120, anchor="e",  stretch=False)
++        self.tree.column("Status",  width=95,  anchor="center", stretch=False)
++
++        tsb = ttk.Scrollbar(tree_wrap, orient="vertical",
++                            command=self.tree.yview,
++                            style="Thin.Vertical.TScrollbar")
++        self.tree.configure(yscrollcommand=tsb.set)
++        tsb.pack(side="right", fill="y", pady=4)
++        self.tree.pack(fill="both", expand=True, padx=(8,0), pady=4)
++        self.tree.bind("<<TreeviewSelect>>", self._on_select)
++
++        # ΓöÇΓöÇ Panel kanan: detail + aksi ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++        right = tk.Frame(body, bg=WHITE, width=300,
++                         highlightbackground=BORDER_CLR,
++                         highlightthickness=1)
++        right.pack(side="right", fill="y")
++        right.pack_propagate(False)
++
++        self._build_detail_panel(right)
++
++    def _build_detail_panel(self, parent):
++        # Header detail
++        d_hdr = tk.Frame(parent, bg=C_DARKEST, height=52)
++        d_hdr.pack(fill="x")
++        d_hdr.pack_propagate(False)
++        tk.Label(d_hdr, text="Detail Pesanan",
++                 font=("Segoe UI", 10, "bold"),
++                 bg=C_DARKEST, fg=WHITE).pack(
++                     side="left", padx=16, pady=15)
+ 
+         # Info pesanan
+-        self.info_frame = tk.Frame(right_panel, bg=WHITE)
+-        self.info_frame.pack(fill="x", padx=8, pady=(8, 4))
+-
+-        self.lbl_id     = tk.Label(self.info_frame, text="Pilih pesanan ΓåÆ",
+-                                    font=("Segoe UI", 12, "bold"),
+-                                    bg=WHITE, fg=DARK_TEXT, anchor="w")
+-        self.lbl_id.pack(fill="x", padx=12, pady=(12, 2))
+-
+-        self.lbl_status = tk.Label(self.info_frame, text="",
+-                                    font=("Segoe UI", 10),
+-                                    bg=WHITE, fg=GRAY_TEXT, anchor="w")
+-        self.lbl_status.pack(fill="x", padx=12, pady=(0, 12))
+-
+-        # Header detail items
+-        tk.Label(right_panel, text="Detail Item:", font=("Segoe UI", 10, "bold"),
+-                 bg=LIGHT_GRAY, fg=DARK_TEXT, anchor="w").pack(
+-                     fill="x", padx=8, pady=(4, 0))
+-
+-        detail_frame = tk.Frame(right_panel, bg=WHITE)
+-        detail_frame.pack(fill="both", expand=True, padx=8, pady=4)
+-
+-        style.configure("Detail.Treeview",
+-                        font=("Segoe UI", 9), rowheight=26,
+-                        background=WHITE, fieldbackground=WHITE, foreground=DARK_TEXT)
+-        style.configure("Detail.Treeview.Heading",
+-                        font=("Segoe UI", 9, "bold"),
+-                        background=ACCENT_B, foreground=WHITE, relief="flat")
++        info = tk.Frame(parent, bg=WHITE)
++        info.pack(fill="x", padx=14, pady=(14,8))
++
++        self.lbl_id = tk.Label(info, text="Pilih pesanan dari daftar",
++                                font=("Segoe UI", 11, "bold"),
++                                bg=WHITE, fg=DARK_TEXT, anchor="w",
++                                wraplength=260, justify="left")
++        self.lbl_id.pack(anchor="w")
++
++        self.lbl_tgl = tk.Label(info, text="",
++                                 font=("Segoe UI", 8),
++                                 bg=WHITE, fg=GRAY_TEXT, anchor="w")
++        self.lbl_tgl.pack(anchor="w", pady=(2,0))
++
++        # Badge status
++        self.badge_frame = tk.Frame(parent, bg=WHITE)
++        self.badge_frame.pack(fill="x", padx=14, pady=(0,10))
++        self.lbl_badge = tk.Label(self.badge_frame, text="",
++                                   font=("Segoe UI", 8, "bold"),
++                                   bg=WHITE, fg=WHITE,
++                                   padx=10, pady=4)
++        self.lbl_badge.pack(side="left")
++
++        tk.Frame(parent, bg=BORDER_CLR, height=1).pack(fill="x", padx=14)
++
++        # Label detail items
++        di_hdr = tk.Frame(parent, bg=WHITE)
++        di_hdr.pack(fill="x", padx=14, pady=(10,6))
++        tk.Frame(di_hdr, bg=C_MINT, width=3, height=14).pack(side="left")
++        tk.Label(di_hdr, text="  Item Dipesan",
++                 font=("Segoe UI", 9, "bold"),
++                 bg=WHITE, fg=DARK_TEXT).pack(side="left")
++
++        # Treeview detail items
++        det_wrap = tk.Frame(parent, bg=WHITE)
++        det_wrap.pack(fill="both", expand=True, padx=8, pady=(0,4))
+ 
+         det_cols = ("Barang", "Jml", "Subtotal")
+-        self.tree_detail = ttk.Treeview(detail_frame, columns=det_cols,
+-                                         show="headings", style="Detail.Treeview")
++        self.tree_detail = ttk.Treeview(det_wrap, columns=det_cols,
++                                         show="headings", style="Detail.Treeview",
++                                         height=6)
+         self.tree_detail.heading("Barang",   text="Nama Barang")
+-        self.tree_detail.heading("Jml",      text="Jml")
++        self.tree_detail.heading("Jml",      text="Qty")
+         self.tree_detail.heading("Subtotal", text="Subtotal")
+-        self.tree_detail.column("Barang",   width=140, anchor="w")
+-        self.tree_detail.column("Jml",      width=40,  anchor="center")
+-        self.tree_detail.column("Subtotal", width=90,  anchor="e")
+-
+-        sb_det = ttk.Scrollbar(detail_frame, orient="vertical", command=self.tree_detail.yview)
+-        self.tree_detail.configure(yscrollcommand=sb_det.set)
+-        sb_det.pack(side="right", fill="y")
++        self.tree_detail.column("Barang",   width=130, anchor="w")
++        self.tree_detail.column("Jml",      width=36,  anchor="center", stretch=False)
++        self.tree_detail.column("Subtotal", width=90,  anchor="e",  stretch=False)
++
++        dsb = ttk.Scrollbar(det_wrap, orient="vertical",
++                            command=self.tree_detail.yview,
++                            style="Thin.Vertical.TScrollbar")
++        self.tree_detail.configure(yscrollcommand=dsb.set)
++        dsb.pack(side="right", fill="y")
+         self.tree_detail.pack(fill="both", expand=True)
+ 
+-        # Total footer
+-        self.lbl_total = tk.Label(right_panel, text="Total: -",
+-                                   font=("Segoe UI", 11, "bold"),
+-                                   bg=LIGHT_GRAY, fg=PRIMARY, anchor="e")
+-        self.lbl_total.pack(fill="x", padx=12, pady=(4, 6))
++        tk.Frame(parent, bg=BORDER_CLR, height=1).pack(fill="x", padx=14, pady=(4,0))
++
++        # Total
++        tot_f = tk.Frame(parent, bg=WHITE)
++        tot_f.pack(fill="x", padx=14, pady=10)
++        tk.Label(tot_f, text="Total:",
++                 font=("Segoe UI", 9),
++                 bg=WHITE, fg=GRAY_TEXT).pack(side="left")
++        self.lbl_total = tk.Label(tot_f, text="ΓÇö",
++                                   font=("Segoe UI", 16, "bold"),
++                                   bg=WHITE, fg=C_MID)
++        self.lbl_total.pack(side="right")
++
++        tk.Frame(parent, bg=BORDER_CLR, height=1).pack(fill="x")
++
++        # Notif aksi
++        self.lbl_aksi_notif = tk.Label(parent, text="",
++                                        font=("Segoe UI", 8),
++                                        bg=WHITE, fg=GRAY_TEXT,
++                                        wraplength=260, justify="center")
++        self.lbl_aksi_notif.pack(fill="x", padx=10, pady=(6,0))
+ 
+         # Tombol aksi
+-        aksi_frame = tk.Frame(right_panel, bg=LIGHT_GRAY)
+-        aksi_frame.pack(fill="x", padx=8, pady=(0, 10))
+-
+-        self.btn_terima = tk.Button(
+-            aksi_frame, text="Γ£à  TERIMA", font=("Segoe UI", 11, "bold"),
+-            bg=ACCENT_G, fg=WHITE, relief="flat", pady=10, cursor="hand2",
+-            state="disabled", activebackground=ACCENT_G_DK, activeforeground=WHITE,
+-            command=self._terima_pesanan
+-        )
+-        self.btn_terima.pack(fill="x", pady=(0, 6))
++        self.aksi_frame = tk.Frame(parent, bg=WHITE)
++        self.aksi_frame.pack(fill="x", padx=14, pady=(6,14))
++        self._render_aksi_buttons(enabled=False, status=None)
+ 
++    def _render_aksi_buttons(self, enabled: bool, status: str):
++        for w in self.aksi_frame.winfo_children():
++            w.destroy()
++
++<<<<<<< HEAD
+         self.btn_tolak = tk.Button(
+             aksi_frame, text="Γ¥î  TOLAK", font=("Segoe UI", 11, "bold"),
+             bg=PRIMARY, fg=WHITE, relief="flat", pady=10, cursor="hand2",
+@@ -187,15 +364,55 @@ class KonfirmasiPanel(tk.Frame):
+             command=self._hapus_pesanan
+         )
+         self.btn_hapus.pack(fill="x")
++=======
++        if not enabled or status != "pending":
++            # Disabled state
++            d1 = _pill_disabled(self.aksi_frame, text="Γ£à  Terima",
++                                 w=260, h=40, r=20)
++            d1.pack(pady=(0,8))
++            d2 = _pill_disabled(self.aksi_frame, text="Γ¥î  Tolak",
++                                 w=260, h=40, r=20)
++            d2.pack()
++            if status and status != "pending":
++                self.lbl_aksi_notif.config(
++                    text=f"Pesanan ini sudah {status.upper()}.",
++                    fg=GRAY_TEXT)
++            else:
++                self.lbl_aksi_notif.config(text="")
++        else:
++            self.lbl_aksi_notif.config(text="")
++            b1 = _pill(self.aksi_frame, text="Γ£à  Terima Pesanan",
++                       command=self._terima_pesanan,
++                       w=260, h=42, r=21,
++                       color=BTN_ACCEPT, hover=BTN_ACCEPT_H,
++                       font=("Segoe UI", 10, "bold"))
++            b1.config(bg=WHITE)
++            b1.pack(pady=(0,8))
++
++            b2 = _pill(self.aksi_frame, text="Γ¥î  Tolak Pesanan",
++                       command=self._tolak_pesanan,
++                       w=260, h=42, r=21,
++                       color=BTN_REJECT, hover=BTN_REJECT_H,
++                       font=("Segoe UI", 10, "bold"))
++            b2.config(bg=WHITE)
++            b2.pack()
++>>>>>>> 0e8bd3a (feat: redesign halaman utama dan login admin)
+ 
+     # ΓöÇΓöÇ Filter ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+     def _set_filter(self, key: str, init: bool = False):
+         self._filter_val = key
+         for k, btn in self.filter_btns.items():
+             if k == key:
+-                btn.config(bg=PRIMARY, fg=WHITE)
++                btn.config(fg=C_MID,
++                           font=("Segoe UI", 9, "bold"))
++                # Garis bawah aktif ΓÇö pakai relief sunken tipis
++                btn.config(relief="groove", bd=0,
++                           highlightbackground=C_MID,
++                           highlightthickness=2)
+             else:
+-                btn.config(bg=LIGHT_GRAY, fg=DARK_TEXT)
++                btn.config(fg=LIGHT_TEXT,
++                           font=("Segoe UI", 9),
++                           relief="flat", bd=0)
+         if not init:
+             self._load_pesanan()
+ 
+@@ -203,13 +420,14 @@ class KonfirmasiPanel(tk.Frame):
+     def _load_pesanan(self):
+         self.selected_id = None
+         self._clear_detail()
+-        for item in self.tree.get_children():
+-            self.tree.delete(item)
++        for row in self.tree.get_children():
++            self.tree.delete(row)
+ 
+         try:
+             from firebase_admin import firestore
+             db = get_db()
+             if self._filter_val == "semua":
++<<<<<<< HEAD
+                 docs = db.collection('pesanan').order_by('tanggal', direction=firestore.Query.DESCENDING).stream()
+             else:
+                 docs = db.collection('pesanan').where('status', '==', self._filter_val).order_by('tanggal', direction=firestore.Query.DESCENDING).stream()
+@@ -227,19 +445,60 @@ class KonfirmasiPanel(tk.Frame):
+             self.tree.tag_configure("diterima", foreground=ACCENT_G)
+             self.tree.tag_configure("ditolak",  foreground=PRIMARY_DK)
+             self.tree.tag_configure("alt",      background=ROW_ALT)
++=======
++                rows = execute_query(
++                    "SELECT id_pesanan, tanggal, total_harga, status "
++                    "FROM pesanan ORDER BY tanggal DESC",
++                    fetch=True)
++            else:
++                rows = execute_query(
++                    "SELECT id_pesanan, tanggal, total_harga, status "
++                    "FROM pesanan WHERE status=%s ORDER BY tanggal DESC",
++                    (self._filter_val,), fetch=True)
++
++            self.lbl_count.config(text=f"({len(rows)} pesanan)")
++
++            # Tag warna per status
++            self.tree.tag_configure("pending",
++                background=S_BG_PENDING,  foreground=S_PENDING)
++            self.tree.tag_configure("diterima",
++                background=S_BG_DITERIMA, foreground=S_DITERIMA)
++            self.tree.tag_configure("ditolak",
++                background=S_BG_DITOLAK,  foreground=S_DITOLAK)
++
++            STATUS_LABEL = {
++                "pending":  "ΓÅ│ Pending",
++                "diterima": "Γ£à Diterima",
++                "ditolak":  "Γ¥î Ditolak",
++            }
++            for r in rows:
++                total  = f"Rp {r['total_harga']:,.0f}"
++                status = r["status"]
++                label  = STATUS_LABEL.get(status, status.upper())
++                self.tree.insert("", "end", iid=str(r["id_pesanan"]),
++                                 values=(f"#{r['id_pesanan']}",
++                                         str(r["tanggal"])[:19],
++                                         total, label),
++                                 tags=(status,))
++>>>>>>> 0e8bd3a (feat: redesign halaman utama dan login admin)
+         except Exception as e:
+-            messagebox.showerror("Error DB", str(e))
++            messagebox.showerror("Error DB", str(e), parent=self)
+ 
+-    def _on_pesanan_select(self, _):
++    def _on_select(self, _):
+         sel = self.tree.selection()
+         if not sel:
+             return
++<<<<<<< HEAD
+         self.selected_id = str(sel[0])
++=======
++        self.selected_id = int(sel[0].replace("#", "").strip())
++>>>>>>> 0e8bd3a (feat: redesign halaman utama dan login admin)
+         self._load_detail(self.selected_id)
+ 
+     def _load_detail(self, id_pesanan: str):
+         self._clear_detail()
+         try:
++<<<<<<< HEAD
+             db = get_db()
+             doc = db.collection('pesanan').document(id_pesanan).get()
+             if not doc.exists:
+@@ -272,10 +531,50 @@ class KonfirmasiPanel(tk.Frame):
+                 sub = f"Rp {dr.get('subtotal', 0):,.0f}"
+                 self.tree_detail.insert("", "end",
+                                         values=(dr.get("nama_barang", ""), dr.get("jumlah", 0), sub))
++=======
++            pesanan = execute_query(
++                "SELECT * FROM pesanan WHERE id_pesanan=%s",
++                (id_pesanan,), fetch=True)
++            if not pesanan:
++                return
++            p      = pesanan[0]
++            status = p["status"]
++
++            self.lbl_id.config(text=f"Pesanan  #{p['id_pesanan']}")
++            self.lbl_tgl.config(text=f"≡ƒôà  {str(p['tanggal'])[:19]}")
++            self.lbl_total.config(text=f"Rp {p['total_harga']:,.0f}")
++
++            # Badge status
++            badge_cfg = {
++                "pending":  (S_BG_PENDING,  S_PENDING,  "ΓÅ│  PENDING"),
++                "diterima": (S_BG_DITERIMA, S_DITERIMA, "Γ£à  DITERIMA"),
++                "ditolak":  (S_BG_DITOLAK,  S_DITOLAK,  "Γ¥î  DITOLAK"),
++            }
++            bg, fg, txt = badge_cfg.get(status, (BG_MAIN, GRAY_TEXT, status.upper()))
++            self.lbl_badge.config(text=txt, bg=bg, fg=fg)
++
++            # Render tombol sesuai status
++            self._render_aksi_buttons(enabled=True, status=status)
++
++            # Detail items
++            details = execute_query(
++                """SELECT dp.jumlah, dp.subtotal, b.nama_barang
++                   FROM detail_pesanan dp
++                   JOIN barang b ON dp.id_barang = b.id_barang
++                   WHERE dp.id_pesanan = %s""",
++                (id_pesanan,), fetch=True)
++            for d in details:
++                self.tree_detail.insert(
++                    "", "end",
++                    values=(d["nama_barang"], d["jumlah"],
++                            f"Rp {d['subtotal']:,.0f}"))
++
++>>>>>>> 0e8bd3a (feat: redesign halaman utama dan login admin)
+         except Exception as e:
+-            messagebox.showerror("Error DB", str(e))
++            messagebox.showerror("Error DB", str(e), parent=self)
+ 
+     def _clear_detail(self):
++<<<<<<< HEAD
+         for item in self.tree_detail.get_children():
+             self.tree_detail.delete(item)
+         self.lbl_id.config(text="Pilih pesanan ΓåÆ")
+@@ -284,16 +583,28 @@ class KonfirmasiPanel(tk.Frame):
+         self.btn_terima.config(state="disabled")
+         self.btn_tolak.config(state="disabled")
+         self.btn_hapus.config(state="disabled")
++=======
++        for row in self.tree_detail.get_children():
++            self.tree_detail.delete(row)
++        self.lbl_id.config(text="Pilih pesanan dari daftar")
++        self.lbl_tgl.config(text="")
++        self.lbl_total.config(text="ΓÇö")
++        self.lbl_badge.config(text="", bg=WHITE)
++        self.lbl_aksi_notif.config(text="")
++        self._render_aksi_buttons(enabled=False, status=None)
++>>>>>>> 0e8bd3a (feat: redesign halaman utama dan login admin)
+ 
+     # ΓöÇΓöÇ Aksi ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+     def _terima_pesanan(self):
+         if not self.selected_id:
+             return
+-        if not messagebox.askyesno("Konfirmasi",
+-                                    f"Terima pesanan #{self.selected_id}?\n\nStok barang akan dikurangi.",
+-                                    parent=self):
++        if not messagebox.askyesno(
++                "Konfirmasi Terima",
++                f"Terima pesanan #{self.selected_id}?\n\nStok barang akan dikurangi.",
++                parent=self):
+             return
+         try:
++<<<<<<< HEAD
+             from firebase_admin import firestore
+             db = get_db()
+             doc_ref = db.collection('pesanan').document(self.selected_id)
+@@ -301,9 +612,19 @@ class KonfirmasiPanel(tk.Frame):
+             if not doc.exists: return
+             p = doc.to_dict()
+             details = p.get('detail_pesanan', [])
++=======
++            conn   = get_connection()
++            cursor = conn.cursor(dictionary=True)
++
++            cursor.execute(
++                "SELECT id_barang, jumlah FROM detail_pesanan WHERE id_pesanan=%s",
++                (self.selected_id,))
++            details = cursor.fetchall()
++>>>>>>> 0e8bd3a (feat: redesign halaman utama dan login admin)
+ 
+-            # Cek stok cukup
++            # Cek stok
+             for d in details:
++<<<<<<< HEAD
+                 b_doc = db.collection('barang').document(d["id_barang"]).get()
+                 if not b_doc.exists: continue
+                 b = b_doc.to_dict()
+@@ -328,6 +649,38 @@ class KonfirmasiPanel(tk.Frame):
+             messagebox.showinfo("Berhasil",
+                                 f"Γ£à Pesanan #{self.selected_id[:8]} DITERIMA!\nStok berhasil dikurangi.",
+                                 parent=self)
++=======
++                cursor.execute(
++                    "SELECT nama_barang, stok FROM barang WHERE id_barang=%s",
++                    (d["id_barang"],))
++                barang = cursor.fetchone()
++                if barang["stok"] < d["jumlah"]:
++                    messagebox.showwarning(
++                        "Stok Tidak Cukup",
++                        f"Stok \"{barang['nama_barang']}\" tidak mencukupi!\n"
++                        f"Tersedia: {barang['stok']},  Dibutuhkan: {d['jumlah']}",
++                        parent=self)
++                    cursor.close(); conn.close()
++                    return
++
++            # Kurangi stok
++            for d in details:
++                cursor.execute(
++                    "UPDATE barang SET stok = stok - %s WHERE id_barang=%s",
++                    (d["jumlah"], d["id_barang"]))
++
++            # Update status
++            cursor.execute(
++                "UPDATE pesanan SET status='diterima' WHERE id_pesanan=%s",
++                (self.selected_id,))
++            conn.commit()
++            cursor.close(); conn.close()
++
++            messagebox.showinfo(
++                "Berhasil",
++                f"Γ£à  Pesanan #{self.selected_id} berhasil DITERIMA!\nStok barang telah dikurangi.",
++                parent=self)
++>>>>>>> 0e8bd3a (feat: redesign halaman utama dan login admin)
+             self._refresh()
+ 
+         except Exception as e:
+@@ -336,16 +689,27 @@ class KonfirmasiPanel(tk.Frame):
+     def _tolak_pesanan(self):
+         if not self.selected_id:
+             return
+-        if not messagebox.askyesno("Konfirmasi",
+-                                    f"Tolak pesanan #{self.selected_id}?\n\nStok tidak akan berubah.",
+-                                    parent=self):
++        if not messagebox.askyesno(
++                "Konfirmasi Tolak",
++                f"Tolak pesanan #{self.selected_id}?\n\nStok tidak akan berubah.",
++                parent=self):
+             return
+         try:
++<<<<<<< HEAD
+             db = get_db()
+             db.collection('pesanan').document(self.selected_id).update({'status': 'ditolak'})
+             messagebox.showinfo("Info",
+                                 f"Γ¥î Pesanan #{self.selected_id[:8]} DITOLAK.",
+                                 parent=self)
++=======
++            execute_query(
++                "UPDATE pesanan SET status='ditolak' WHERE id_pesanan=%s",
++                (self.selected_id,))
++            messagebox.showinfo(
++                "Info",
++                f"Γ¥î  Pesanan #{self.selected_id} berhasil DITOLAK.",
++                parent=self)
++>>>>>>> 0e8bd3a (feat: redesign halaman utama dan login admin)
+             self._refresh()
+         except Exception as e:
+             messagebox.showerror("Error", str(e), parent=self)
+@@ -420,4 +784,4 @@ class KonfirmasiPanel(tk.Frame):
+     def _refresh(self):
+         self.selected_id = None
+         self._clear_detail()
+-        self._load_pesanan()
++        self._load_pesanan()
+\ No newline at end of file
+diff --git a/buat_admin.py b/buat_admin.py
+new file mode 100644
+index 0000000..68fa211
+--- /dev/null
++++ b/buat_admin.py
+@@ -0,0 +1,44 @@
++"""
++buat_admin.py - Script Otomatis Nambahkeun Akun Admin SHA256
++Aplikasi Business Center SMKN 13 Bandung
++"""
++
++import hashlib
++from db import execute_query
++
++def hash_password(pw: str) -> str:
++    return hashlib.sha256(pw.encode()).hexdigest()
++
++def input_admin_otomatis():
++    username_anyar = "admin13"
++    password_asli  = "admin123"
++    role_user      = "admin" # Sangkan role-na otomatis jadi admin
++    
++    # Pros├⌐s enkripsi password nganggo SHA256 sakumaha dina login_admin.py
++    password_hashed = hash_password(password_asli)
++
++    print("≡ƒöä Sedang ngasupkeun akun admin ka database...")
++    
++    try:
++        
++        # Kolom disaluyukeun sareng QUERY SELECT dina login_admin.py (username, password, role)
++        execute_query(
++            "INSERT INTO users (username, password, role) VALUES (%s, %s, %s)",
++            (username_anyar, password_hashed, role_user),
++            fetch=False
++        )
++        
++        print("\n≡ƒöÑ MANTAP! Akun admin dibuat.")
++        print("ΓöÇ" * 50)
++        print(f" Username : {username_anyar}")
++        print(f" Password : {password_asli}")
++        print(f" Role     : {role_user}")
++        print(f" Hash DB  : {password_hashed}")
++        print("ΓöÇ" * 50)
++        print("Sok t├⌐s !")
++
++    except Exception as e:
++        print(f"\nΓ¥î Waduh gagal mang, cek database: {e}")
++
++if __name__ == "__main__":
++    input_admin_otomatis()
+\ No newline at end of file
+diff --git a/login_admin.py b/login_admin.py
+index 4de128b..3472999 100644
+--- a/login_admin.py
++++ b/login_admin.py
+@@ -1,35 +1,138 @@
+ """
+-login_admin.py - Halaman login khusus admin
++login_admin.py - Halaman Login Admin (Redesign Modern Split Layout)
+ Aplikasi Business Center SMKN 13 Bandung
++Inspirasi: Split panel, dark green palette #051F20 - #DAF1DE
+ """
+ 
+ import tkinter as tk
+ from tkinter import messagebox
+ import hashlib
++<<<<<<< HEAD
+ from db import get_db
++=======
++import os
++from PIL import Image, ImageTk, ImageDraw, ImageFilter
++from db import execute_query
++>>>>>>> 0e8bd3a (feat: redesign halaman utama dan login admin)
+ 
+-PRIMARY    = "#CC0000"
+-PRIMARY_DK = "#A00000"
+-WHITE      = "#FFFFFF"
+-LIGHT_GRAY = "#F5F5F5"
+-DARK_TEXT  = "#212121"
+-GRAY_TEXT  = "#757575"
+-SHADOW     = "#E8E8E8"
++# ΓöÇΓöÇΓöÇ Palet Warna (dari color palette referensi) ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++C_DARKEST   = "#051F20"   # Hijau paling gelap
++C_DARK      = "#0B2B26"   # Hijau gelap
++C_MID       = "#163832"   # Hijau mid
++C_MUTED     = "#235347"   # Hijau muted
++C_MINT      = "#8EB69B"   # Mint lembut
++C_PALE      = "#DAF1DE"   # Pale mint (hampir putih)
++WHITE       = "#FFFFFF"
++DARK_TEXT   = "#1A1A1A"
++GRAY_TEXT   = "#6B7280"
++LIGHT_TEXT  = "#9CA3AF"
++INPUT_BG    = "#F4FAF6"
++INPUT_FOCUS = "#DAF1DE"
++BORDER_CLR  = "#C9E8D1"
++ERR_CLR     = "#E53935"
++
++PANEL_W     = 340   # lebar panel kiri (ilustrasi)
++WIN_W       = 820
++WIN_H       = 520
+ 
+ 
+ def hash_password(pw: str) -> str:
+     return hashlib.sha256(pw.encode()).hexdigest()
+ 
+ 
++# ΓöÇΓöÇΓöÇ Helper: Pill Button Canvas ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++def _pill_btn(parent, text, command, w=260, h=44, r=22,
++              color=C_MID, hover=C_DARK, fg=WHITE,
++              font=("Segoe UI", 11, "bold")):
++    cv = tk.Canvas(parent, width=w, height=h,
++                   bg=parent["bg"], highlightthickness=0, cursor="hand2")
++
++    def _draw(fill):
++        cv.delete("all")
++        cv.create_arc(0, 0, r*2, h, start=90, extent=180, fill=fill, outline=fill)
++        cv.create_arc(w-r*2, 0, w, h, start=270, extent=180, fill=fill, outline=fill)
++        cv.create_rectangle(r, 0, w-r, h, fill=fill, outline=fill)
++        cv.create_text(w//2, h//2, text=text, fill=fg, font=font, anchor="center")
++
++    _draw(color)
++    cv.bind("<Enter>",    lambda e: _draw(hover))
++    cv.bind("<Leave>",    lambda e: _draw(color))
++    cv.bind("<Button-1>", lambda e: command())
++    return cv
++
++
++# ΓöÇΓöÇΓöÇ Helper: Rounded Entry (Canvas + Entry overlay) ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++def _rounded_entry(parent, textvariable=None, show=None,
++                   w=260, h=42, r=12, bg=INPUT_BG,
++                   font=("Segoe UI", 11)):
++    frame = tk.Frame(parent, bg=parent["bg"])
++    cv = tk.Canvas(frame, width=w, height=h, bg=parent["bg"],
++                   highlightthickness=0)
++    cv.pack()
++
++    def _draw_bg(fill, border):
++        cv.delete("bg")
++        # Top-left arc
++        cv.create_arc(0, 0, r*2, r*2, start=90, extent=90,
++                      fill=fill, outline=border, tags="bg")
++        # Top-right arc
++        cv.create_arc(w-r*2, 0, w, r*2, start=0, extent=90,
++                      fill=fill, outline=border, tags="bg")
++        # Bottom-right arc
++        cv.create_arc(w-r*2, h-r*2, w, h, start=270, extent=90,
++                      fill=fill, outline=border, tags="bg")
++        # Bottom-left arc
++        cv.create_arc(0, h-r*2, r*2, h, start=180, extent=90,
++                      fill=fill, outline=border, tags="bg")
++        # Fill rectangles
++        cv.create_rectangle(r, 0, w-r, h, fill=fill, outline=fill, tags="bg")
++        cv.create_rectangle(0, r, w, h-r, fill=fill, outline=fill, tags="bg")
++        # Border lines
++        cv.create_line(r, 0, w-r, 0, fill=border, tags="bg")
++        cv.create_line(r, h, w-r, h, fill=border, tags="bg")
++        cv.create_line(0, r, 0, h-r, fill=border, tags="bg")
++        cv.create_line(w, r, w, h-r, fill=border, tags="bg")
++
++    _draw_bg(bg, BORDER_CLR)
++
++    pad = 14
++    ent = tk.Entry(frame, textvariable=textvariable,
++                   font=font, relief="flat", bd=0,
++                   bg=bg, fg=DARK_TEXT,
++                   insertbackground=C_MID,
++                   highlightthickness=0,
++                   width=int((w - pad*2) / 7))
++    if show:
++        ent.config(show=show)
++
++    ent.place(x=pad, y=(h - ent.winfo_reqheight()) // 2 + 2,
++              width=w - pad*2)
++
++    def _focus_in(e):
++        _draw_bg(INPUT_FOCUS, C_MINT)
++    def _focus_out(e):
++        _draw_bg(bg, BORDER_CLR)
++
++    ent.bind("<FocusIn>",  _focus_in)
++    ent.bind("<FocusOut>", _focus_out)
++
++    return frame, ent
++
++
++# ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+ class LoginAdmin(tk.Toplevel):
++
+     def __init__(self, master):
+         super().__init__(master)
+-        self.master = master
+-        self.title("Login Admin ΓÇö Business Center")
+-        self.geometry("420x480")
++        self.master   = master
++        self.show_pw  = False
++        self._blobs   = []   # simpan PhotoImage
++
++        self.title("Login Admin ΓÇö Business Center SMKN 13 Bandung")
++        self.geometry(f"{WIN_W}x{WIN_H}")
+         self.resizable(False, False)
+         self.configure(bg=WHITE)
+-        self._center(420, 480)
++        self._center(WIN_W, WIN_H)
+         self._build_ui()
+         self.grab_set()
+ 
+@@ -39,79 +142,182 @@ class LoginAdmin(tk.Toplevel):
+         y = (self.winfo_screenheight() - h) // 2
+         self.geometry(f"{w}x{h}+{x}+{y}")
+ 
++    # ΓöÇΓöÇ Build UI ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+     def _build_ui(self):
+-        # ΓöÇΓöÇ Header ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+-        hdr = tk.Frame(self, bg=PRIMARY, height=110)
+-        hdr.pack(fill="x")
+-        hdr.pack_propagate(False)
+-
+-        tk.Label(hdr, text="≡ƒöÆ", font=("Segoe UI", 30),
+-                 bg=PRIMARY, fg=WHITE).pack(pady=(18, 2))
+-        tk.Label(hdr, text="Login Admin", font=("Segoe UI", 16, "bold"),
+-                 bg=PRIMARY, fg=WHITE).pack()
+-
+-        # ΓöÇΓöÇ Form Card ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+-        card = tk.Frame(self, bg=WHITE, padx=36, pady=28)
+-        card.pack(expand=True, fill="both")
+-
+-        tk.Label(card, text="Username", font=("Segoe UI", 10, "bold"),
+-                 bg=WHITE, fg=DARK_TEXT, anchor="w").pack(fill="x", pady=(0, 4))
+-
+-        self.entry_user = tk.Entry(card, font=("Segoe UI", 12), relief="solid",
+-                                   bd=1, fg=DARK_TEXT, bg=LIGHT_GRAY)
+-        self.entry_user.pack(fill="x", ipady=8, pady=(0, 16))
+-        self.entry_user.focus()
++        # Split: kiri (ilustrasi) + kanan (form)
++        left  = tk.Frame(self, bg=C_DARKEST, width=PANEL_W)
++        left.pack(side="left", fill="y")
++        left.pack_propagate(False)
++
++        right = tk.Frame(self, bg=WHITE)
++        right.pack(side="left", fill="both", expand=True)
+ 
+-        tk.Label(card, text="Password", font=("Segoe UI", 10, "bold"),
+-                 bg=WHITE, fg=DARK_TEXT, anchor="w").pack(fill="x", pady=(0, 4))
++        self._build_left(left)
++        self._build_right(right)
+ 
+-        pw_frame = tk.Frame(card, bg=WHITE)
+-        pw_frame.pack(fill="x", pady=(0, 24))
++    # ΓöÇΓöÇ Panel Kiri ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++    def _build_left(self, parent):
++        # Background gradient-like via Canvas
++        cv = tk.Canvas(parent, width=PANEL_W, height=WIN_H,
++                       bg=C_DARKEST, highlightthickness=0)
++        cv.pack(fill="both", expand=True)
+ 
+-        self.entry_pass = tk.Entry(pw_frame, font=("Segoe UI", 12), relief="solid",
+-                                   bd=1, show="ΓùÅ", fg=DARK_TEXT, bg=LIGHT_GRAY)
+-        self.entry_pass.pack(side="left", fill="x", expand=True, ipady=8)
++        # Dekoratif: lingkaran-lingkaran blob hijau
++        blobs = [
++            (PANEL_W//2 - 20, WIN_H//2 - 10, 160, C_DARK),
++            (30,  60,  90,  C_MID),
++            (PANEL_W - 50, WIN_H - 80, 110, C_MID),
++            (60,  WIN_H - 50, 70, C_DARK),
++            (PANEL_W - 30, 40, 60, C_MUTED),
++            (PANEL_W//2 + 60, 30, 40, C_MUTED),
++        ]
++        for bx, by, br, bc in blobs:
++            cv.create_oval(bx-br, by-br, bx+br, by+br, fill=bc, outline="")
+ 
+-        self.show_pw = False
+-        self.btn_eye = tk.Button(pw_frame, text="≡ƒæü", font=("Segoe UI", 10),
+-                                  bg=LIGHT_GRAY, relief="flat", bd=0,
+-                                  command=self._toggle_pw, cursor="hand2")
+-        self.btn_eye.pack(side="left", padx=(4, 0), ipady=8)
++        # Coba load ilustrasi jika ada (ganti path sesuai file kamu)
++        img_loaded = False
++        for fname in ("ilustrasi_login.png", "ilustrasi.png",
++                      "assets/ilustrasi_login.png", "assets/ilustrasi.png"):
++            fpath = os.path.join(os.path.dirname(__file__), fname)
++            if os.path.isfile(fpath):
++                try:
++                    img = Image.open(fpath).convert("RGBA")
++                    img.thumbnail((220, 260), Image.LANCZOS)
++                    ph  = ImageTk.PhotoImage(img)
++                    self._blobs.append(ph)
++                    cx = PANEL_W // 2
++                    cy = WIN_H  // 2 - 20
++                    cv.create_image(cx, cy, image=ph, anchor="center")
++                    img_loaded = True
++                    break
++                except Exception:
++                    pass
++
++        if not img_loaded:
++            # Placeholder teks & ikon kalau belum ada gambar
++            cv.create_text(PANEL_W//2, WIN_H//2 - 50,
++                           text="≡ƒÅ¬", font=("Segoe UI Emoji", 52),
++                           fill=C_MINT, anchor="center")
++            cv.create_text(PANEL_W//2, WIN_H//2 + 30,
++                           text="Business Center",
++                           font=("Segoe UI", 14, "bold"),
++                           fill=WHITE, anchor="center")
++            cv.create_text(PANEL_W//2, WIN_H//2 + 56,
++                           text="SMKN 13 Bandung",
++                           font=("Segoe UI", 10),
++                           fill=C_MINT, anchor="center")
++
++        # Titik-titik dekoratif kecil
++        dots = [(30, 200), (PANEL_W-25, 150), (PANEL_W-40, WIN_H-140),
++                (20, WIN_H-100), (PANEL_W//2-80, 30), (PANEL_W//2+70, WIN_H-40)]
++        for dx, dy in dots:
++            r = 6
++            cv.create_oval(dx-r, dy-r, dx+r, dy+r, fill=C_MINT, outline="")
++
++        # Copyright kiri bawah
++        cv.create_text(PANEL_W//2, WIN_H - 18,
++                       text="┬⌐ 2024 BC SMKN 13 Bandung",
++                       font=("Segoe UI", 7),
++                       fill=C_MUTED, anchor="center")
++
++    # ΓöÇΓöÇ Panel Kanan: Form ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++    def _build_right(self, parent):
++        # Wrapper tengah
++        wrap = tk.Frame(parent, bg=WHITE)
++        wrap.place(relx=.5, rely=.5, anchor="center")
++
++        # Heading kecil
++        tk.Label(wrap, text="B U S I N E S S   C E N T E R",
++                 font=("Segoe UI", 8, "bold"),
++                 bg=WHITE, fg=C_MINT).pack(anchor="w", pady=(0, 2))
++
++        tk.Label(wrap, text="Selamat Datang,",
++                 font=("Segoe UI", 22, "bold"),
++                 bg=WHITE, fg=DARK_TEXT).pack(anchor="w")
++        tk.Label(wrap, text="Silakan login untuk melanjutkan.",
++                 font=("Segoe UI", 10),
++                 bg=WHITE, fg=GRAY_TEXT).pack(anchor="w", pady=(2, 28))
++
++        # ΓöÇΓöÇ Username ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++        tk.Label(wrap, text="Username",
++                 font=("Segoe UI", 9, "bold"),
++                 bg=WHITE, fg=DARK_TEXT).pack(anchor="w", pady=(0, 6))
++
++        self.var_user = tk.StringVar()
++        f_user, self.entry_user = _rounded_entry(
++            wrap, textvariable=self.var_user, w=280, h=44)
++        f_user.pack(anchor="w", pady=(0, 16))
++        self.entry_user.focus()
++
++        # ΓöÇΓöÇ Password ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++        tk.Label(wrap, text="Password",
++                 font=("Segoe UI", 9, "bold"),
++                 bg=WHITE, fg=DARK_TEXT).pack(anchor="w", pady=(0, 6))
++
++        self.var_pass = tk.StringVar()
++        f_pass, self.entry_pass = _rounded_entry(
++            wrap, textvariable=self.var_pass, show="ΓùÅ", w=280, h=44)
++        f_pass.pack(anchor="w", pady=(0, 6))
++
++        # Toggle show password
++        toggle_row = tk.Frame(wrap, bg=WHITE)
++        toggle_row.pack(anchor="w", pady=(0, 24))
++        self.var_show = tk.IntVar()
++        tk.Checkbutton(toggle_row, text="Tampilkan password",
++                       variable=self.var_show,
++                       font=("Segoe UI", 8), bg=WHITE,
++                       fg=GRAY_TEXT, activebackground=WHITE,
++                       selectcolor=WHITE, cursor="hand2",
++                       command=self._toggle_pw).pack(side="left")
+ 
+         # ΓöÇΓöÇ Tombol Login ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+-        self.btn_login = tk.Button(
+-            card, text="Masuk ΓåÆ", font=("Segoe UI", 12, "bold"),
+-            bg=PRIMARY, fg=WHITE, relief="flat", bd=0,
+-            pady=10, cursor="hand2",
+-            activebackground=PRIMARY_DK, activeforeground=WHITE,
+-            command=self._login
+-        )
+-        self.btn_login.pack(fill="x")
+-
+-        tk.Button(card, text="ΓåÉ Kembali", font=("Segoe UI", 10),
+-                  bg=WHITE, fg=GRAY_TEXT, relief="flat", bd=0,
+-                  cursor="hand2", command=self.destroy).pack(pady=(14, 0))
+-
+-        # ΓöÇΓöÇ Bind Enter ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++        btn = _pill_btn(wrap, text="Masuk  ΓåÆ", command=self._login,
++                        w=280, h=46, r=23,
++                        color=C_MID, hover=C_DARK)
++        btn.pack(anchor="w")
++
++        # ΓöÇΓöÇ Kembali ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++        back_f = tk.Frame(wrap, bg=WHITE)
++        back_f.pack(anchor="w", pady=(16, 0))
++        tk.Label(back_f, text="ΓåÉ", font=("Segoe UI", 10),
++                 bg=WHITE, fg=C_MINT).pack(side="left")
++        back_btn = tk.Label(back_f, text=" Kembali ke Menu Utama",
++                            font=("Segoe UI", 9),
++                            bg=WHITE, fg=C_MUTED, cursor="hand2")
++        back_btn.pack(side="left")
++        back_btn.bind("<Button-1>", lambda e: self._kembali())
++        back_btn.bind("<Enter>",    lambda e: back_btn.config(fg=C_MID))
++        back_btn.bind("<Leave>",    lambda e: back_btn.config(fg=C_MUTED))
++
++        # ΓöÇΓöÇ Label error ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++        self.lbl_err = tk.Label(wrap, text="",
++                                font=("Segoe UI", 9),
++                                bg=WHITE, fg=ERR_CLR)
++        self.lbl_err.pack(anchor="w", pady=(10, 0))
++
++        # Bind Enter
+         self.bind("<Return>", lambda e: self._login())
+ 
+-        # ΓöÇΓöÇ Hover efek tombol ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+-        self.btn_login.bind("<Enter>", lambda e: self.btn_login.config(bg=PRIMARY_DK))
+-        self.btn_login.bind("<Leave>", lambda e: self.btn_login.config(bg=PRIMARY))
++    # ΓöÇΓöÇ Actions ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++    def _kembali(self):
++        self.destroy()
++        self.master.deiconify()
+ 
+     def _toggle_pw(self):
+         self.show_pw = not self.show_pw
+         self.entry_pass.config(show="" if self.show_pw else "ΓùÅ")
+ 
+     def _login(self):
+-        username = self.entry_user.get().strip()
+-        password = self.entry_pass.get().strip()
++        username = self.var_user.get().strip()
++        password = self.var_pass.get().strip()
++        self.lbl_err.config(text="")
+ 
+         if not username or not password:
+-            messagebox.showwarning("Peringatan", "Username dan password harus diisi!", parent=self)
++            self.lbl_err.config(text="ΓÜá  Username dan password harus diisi.")
+             return
+ 
+         try:
++<<<<<<< HEAD
+             db = get_db()
+             hashed_pw = hash_password(password)
+             
+@@ -133,10 +339,33 @@ class LoginAdmin(tk.Toplevel):
+                 messagebox.showerror("Gagal Login", "Username atau password salah!", parent=self)
+                 self.entry_pass.delete(0, "end")
+                 
++=======
++            rows = execute_query(
++                "SELECT id_user, username, role FROM users "
++                "WHERE username=%s AND password=%s",
++                (username, hash_password(password)),
++                fetch=True
++            )
++>>>>>>> 0e8bd3a (feat: redesign halaman utama dan login admin)
+         except Exception as e:
+             messagebox.showerror("Error", str(e), parent=self)
+             return
+ 
++<<<<<<< HEAD
++=======
++        if rows:
++            admin_data = rows[0]
++            self.destroy()
++            from admin.dashboard import AdminDashboard
++            dash = AdminDashboard(self.master, admin_data)
++            dash.protocol("WM_DELETE_WINDOW",
++                          lambda: self._on_dashboard_close(dash))
++        else:
++            self.lbl_err.config(text="Γ£ò  Username atau password salah.")
++            self.entry_pass.delete(0, "end")
++            self.entry_pass.focus()
++
++>>>>>>> 0e8bd3a (feat: redesign halaman utama dan login admin)
+     def _on_dashboard_close(self, dash):
+         dash.destroy()
+-        self.master.deiconify()
++        self.master.deiconify()
+\ No newline at end of file
+diff --git a/main.py b/main.py
+index 151f015..7dda84b 100644
+--- a/main.py
++++ b/main.py
+@@ -1,5 +1,6 @@
+ """
+ main.py - Entry point Aplikasi Business Center SMKN 13 Bandung
++Premium Modern Redesign
+ """
+ 
+ import tkinter as tk
+@@ -9,158 +10,580 @@ import os
+ 
+ sys.path.insert(0, os.path.dirname(__file__))
+ 
+-# ΓöÇΓöÇΓöÇ Konstanta ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+-PRIMARY    = "#CC0000"
+-PRIMARY_DK = "#A00000"
+-WHITE      = "#FFFFFF"
+-LIGHT_GRAY = "#F2F2F2"
+-DARK_TEXT  = "#212121"
+-GRAY_TEXT  = "#757575"
+-ACCENT_G   = "#2E7D32"
+-ACCENT_G_DK= "#1B5E20"
++# ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++# PALET WARNA
++# ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++C_DARKEST   = "#051F20"
++C_DARK      = "#0B2B26"
++C_MID       = "#163832"
++C_MUTED     = "#235347"
++C_MINT      = "#8EB69B"
++C_PALE      = "#DAF1DE"
+ 
++WHITE       = "#FFFFFF"
++BG_MAIN     = "#F4FAF6"
+ 
++BORDER_CLR  = "#D9E9DE"
++
++DARK_TEXT   = "#1A2E22"
++GRAY_TEXT   = "#5C7A68"
++LIGHT_TEXT  = "#9DB8A8"
++
++ADMIN_CLR   = "#1A3A5C"
++ADMIN_HVR   = "#102640"
++ADMIN_PALE  = "#EEF2FF"
++
++
++# ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++# PILL BUTTON
++# ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++def _pill(parent, text, command, w=190, h=42, r=21,
++          color=C_MID, hover=C_DARK, fg=WHITE,
++          font=("Segoe UI", 10, "bold")):
++
++    cv = tk.Canvas(
++        parent,
++        width=w,
++        height=h,
++        bg=parent["bg"],
++        highlightthickness=0,
++        cursor="hand2"
++    )
++
++    def _draw(fill):
++        cv.delete("all")
++
++        cv.create_arc(
++            0, 0, r * 2, h,
++            start=90,
++            extent=180,
++            fill=fill,
++            outline=fill
++        )
++
++        cv.create_arc(
++            w - r * 2, 0, w, h,
++            start=270,
++            extent=180,
++            fill=fill,
++            outline=fill
++        )
++
++        cv.create_rectangle(
++            r, 0, w - r, h,
++            fill=fill,
++            outline=fill
++        )
++
++        cv.create_text(
++            w // 2,
++            h // 2,
++            text=text,
++            fill=fg,
++            font=font
++        )
++
++    _draw(color)
++
++    cv.bind("<Enter>", lambda e: _draw(hover))
++    cv.bind("<Leave>", lambda e: _draw(color))
++    cv.bind("<Button-1>", lambda e: command())
++
++    return cv
++
++
++# ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
++# MAIN APP
++# ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+ class MainApp(tk.Tk):
++
+     def __init__(self):
+         super().__init__()
+-        self.title("Business Center - SMKN 13 Bandung")
+-        self.geometry("560x420")
++
++        self.title("Business Center ΓÇö SMKN 13 Bandung")
++
++        self.geometry("760x560")
+         self.resizable(False, False)
++
+         self.configure(bg=WHITE)
+-        self._center(560, 420)
++
++        self._center(760, 560)
++
+         self._build_ui()
+ 
++    # ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++    # CENTER WINDOW
++    # ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+     def _center(self, w, h):
+         self.update_idletasks()
+-        x = (self.winfo_screenwidth()  - w) // 2
++
++        x = (self.winfo_screenwidth() - w) // 2
+         y = (self.winfo_screenheight() - h) // 2
++
+         self.geometry(f"{w}x{h}+{x}+{y}")
+ 
++    # ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++    # BUILD UI
++    # ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+     def _build_ui(self):
+-        # ΓöÇΓöÇ Header ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+-        hdr = tk.Frame(self, bg=PRIMARY, height=85)
++        self._build_header()
++        self._build_body()
++        self._build_footer()
++
++    # ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++    # HEADER
++    # ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++    def _build_header(self):
++
++        hdr = tk.Frame(
++            self,
++            bg=C_DARKEST,
++            height=105
++        )
++
+         hdr.pack(fill="x")
+         hdr.pack_propagate(False)
+ 
+-        tk.Label(hdr, text="BUSINESS CENTER",
+-                 font=("Segoe UI", 20, "bold"),
+-                 bg=PRIMARY, fg=WHITE).pack(pady=(14, 0))
+-        tk.Label(hdr, text="SMKN 13 Bandung",
+-                 font=("Segoe UI", 10),
+-                 bg=PRIMARY, fg="#FFCCCC").pack()
+-
+-        # ΓöÇΓöÇ Body ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+-        body = tk.Frame(self, bg=WHITE)
+-        body.pack(expand=True, fill="both")
+-
+-        tk.Label(body, text="Selamat Datang!",
+-                 font=("Segoe UI", 16, "bold"),
+-                 bg=WHITE, fg=DARK_TEXT).pack(pady=(28, 4))
+-        tk.Label(body, text="Silakan pilih mode:",
+-                 font=("Segoe UI", 11),
+-                 bg=WHITE, fg=GRAY_TEXT).pack(pady=(0, 24))
+-
+-        # ΓöÇΓöÇ Dua tombol utama ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+-        btn_frame = tk.Frame(body, bg=WHITE)
+-        btn_frame.pack()
+-
+-        # --- Tombol Transaksi ---
+-        frame_t = tk.Frame(btn_frame, bg=LIGHT_GRAY,
+-                           highlightbackground="#CCCCCC",
+-                           highlightthickness=1)
+-        frame_t.grid(row=0, column=0, padx=16)
+-
+-        tk.Label(frame_t, text="Transaksi",
+-                 font=("Segoe UI", 14, "bold"),
+-                 bg=LIGHT_GRAY, fg=DARK_TEXT,
+-                 width=16, pady=10).pack()
+-        tk.Label(frame_t, text="Kasir / Pembeli\n(tanpa login)",
+-                 font=("Segoe UI", 9),
+-                 bg=LIGHT_GRAY, fg=GRAY_TEXT,
+-                 justify="center").pack(pady=(0, 8))
+-
+-        btn_t = tk.Button(frame_t,
+-                          text="Masuk ke Transaksi",
+-                          font=("Segoe UI", 10, "bold"),
+-                          bg=ACCENT_G, fg=WHITE,
+-                          activebackground=ACCENT_G_DK,
+-                          activeforeground=WHITE,
+-                          relief="flat", bd=0,
+-                          padx=14, pady=8,
+-                          cursor="hand2",
+-                          command=self._open_transaksi)
+-        btn_t.pack(padx=16, pady=(0, 14))
+-
+-        # --- Tombol Admin ---
+-        frame_a = tk.Frame(btn_frame, bg=LIGHT_GRAY,
+-                           highlightbackground="#CCCCCC",
+-                           highlightthickness=1)
+-        frame_a.grid(row=0, column=1, padx=16)
+-
+-        tk.Label(frame_a, text="Admin",
+-                 font=("Segoe UI", 14, "bold"),
+-                 bg=LIGHT_GRAY, fg=DARK_TEXT,
+-                 width=16, pady=10).pack()
+-        tk.Label(frame_a, text="Kelola barang &\nkonfirmasi pesanan",
+-                 font=("Segoe UI", 9),
+-                 bg=LIGHT_GRAY, fg=GRAY_TEXT,
+-                 justify="center").pack(pady=(0, 8))
+-
+-        btn_a = tk.Button(frame_a,
+-                          text="Login Admin",
+-                          font=("Segoe UI", 10, "bold"),
+-                          bg=PRIMARY, fg=WHITE,
+-                          activebackground=PRIMARY_DK,
+-                          activeforeground=WHITE,
+-                          relief="flat", bd=0,
+-                          padx=14, pady=8,
+-                          cursor="hand2",
+-                          command=self._open_admin_login)
+-        btn_a.pack(padx=16, pady=(0, 14))
+-
+-        # Hover efek hanya pada frame pembungkus (BUKAN button)
+-        for card, btn, hover_col, normal_col in [
+-            (frame_t, btn_t, "#E8F5E9", LIGHT_GRAY),
+-            (frame_a, btn_a, "#FFEBEE", LIGHT_GRAY),
+-        ]:
+-            for lbl in card.winfo_children():
+-                if isinstance(lbl, tk.Label):
+-                    lbl.bind("<Enter>", lambda e, c=card, h=hover_col: c.config(bg=h))
+-                    lbl.bind("<Leave>", lambda e, c=card, n=normal_col: c.config(bg=n))
+-            card.bind("<Enter>", lambda e, c=card, h=hover_col: c.config(bg=h))
+-            card.bind("<Leave>", lambda e, c=card, n=normal_col: c.config(bg=n))
+-
+-        # ΓöÇΓöÇ Footer ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+-        tk.Label(self,
+-                 text="(c) 2024 Business Center SMKN 13 Bandung",
+-                 font=("Segoe UI", 8),
+-                 bg=WHITE, fg="#AAAAAA").pack(pady=10)
+-
+-    # ΓöÇΓöÇ Navigasi ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++        # Accent line
++        tk.Frame(
++            self,
++            bg=C_MINT,
++            height=4
++        ).pack(fill="x")
++
++        inner = tk.Frame(
++            hdr,
++            bg=C_DARKEST
++        )
++
++        inner.pack(
++            expand=True,
++            fill="both",
++            padx=34
++        )
++
++        # ICON
++        tk.Label(
++            inner,
++            text="≡ƒÅ¬",
++            font=("Segoe UI Emoji", 30),
++            bg=C_DARKEST
++        ).pack(
++            side="left",
++            padx=(0, 18)
++        )
++
++        # TEXT
++        txt = tk.Frame(
++            inner,
++            bg=C_DARKEST
++        )
++
++        txt.pack(side="left")
++
++        tk.Label(
++            txt,
++            text="BUSINESS CENTER",
++            font=("Segoe UI", 21, "bold"),
++            bg=C_DARKEST,
++            fg=WHITE
++        ).pack(anchor="w")
++
++        tk.Label(
++            txt,
++            text="SMKN 13 Bandung  ΓÇó  Sistem Manajemen Kasir Modern",
++            font=("Segoe UI", 9),
++            bg=C_DARKEST,
++            fg=C_MINT
++        ).pack(anchor="w", pady=(4, 0))
++
++    # ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++    # BODY
++    # ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++    def _build_body(self):
++
++        body = tk.Frame(
++            self,
++            bg=BG_MAIN
++        )
++
++        body.pack(
++            expand=True,
++            fill="both"
++        )
++
++        container = tk.Frame(
++            body,
++            bg=BG_MAIN
++        )
++
++        container.pack(expand=True)
++
++        # ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++        # WELCOME CARD
++        # ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++        welcome = tk.Frame(
++            container,
++            bg=WHITE,
++            highlightbackground=BORDER_CLR,
++            highlightthickness=1
++        )
++
++        welcome.pack(
++            fill="x",
++            padx=34,
++            pady=(32, 26)
++        )
++
++        welcome_inner = tk.Frame(
++            welcome,
++            bg=WHITE
++        )
++
++        welcome_inner.pack(
++            fill="both",
++            padx=28,
++            pady=24
++        )
++
++        tk.Label(
++            welcome_inner,
++            text="Selamat Datang ≡ƒæï",
++            font=("Segoe UI", 18, "bold"),
++            bg=WHITE,
++            fg=DARK_TEXT
++        ).pack(anchor="w")
++
++        tk.Label(
++            welcome_inner,
++            text="Pilih mode yang ingin digunakan untuk memulai sistem Business Center.",
++            font=("Segoe UI", 10),
++            bg=WHITE,
++            fg=GRAY_TEXT
++        ).pack(anchor="w", pady=(6, 0))
++
++        # ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++        # CARD CONTAINER
++        # ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++        cards = tk.Frame(
++            container,
++            bg=BG_MAIN
++        )
++
++        cards.pack(fill="both", padx=34)
++
++        self._make_card(
++            parent=cards,
++            col=0,
++
++            icon="≡ƒ¢Æ",
++            icon_bg="#EAF7EF",
++
++            title="Transaksi",
++
++            subtitle="Digunakan untuk pembelian\nproduk dan transaksi kasir.",
++
++            btn_text="Masuk Transaksi",
++
++            btn_color=C_MID,
++            btn_hover=C_DARK,
++
++            card_hover="#F4FCF7",
++            border_act=C_MINT,
++
++            command=self._open_transaksi
++        )
++
++        self._make_card(
++            parent=cards,
++            col=1,
++
++            icon="≡ƒöÉ",
++            icon_bg=ADMIN_PALE,
++
++            title="Admin Panel",
++
++            subtitle="Kelola barang, stok,\nserta konfirmasi pesanan.",
++
++            btn_text="Login Admin",
++
++            btn_color=ADMIN_CLR,
++            btn_hover=ADMIN_HVR,
++
++            card_hover="#F5F7FF",
++            border_act="#7B9ED9",
++
++            command=self._open_admin_login
++        )
++
++        cards.grid_columnconfigure(0, weight=1, uniform="card")
++        cards.grid_columnconfigure(1, weight=1, uniform="card")
++
++    # ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++    # CARD COMPONENT
++    # ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++    def _make_card(self, parent, col, icon, icon_bg, title, subtitle,
++                   btn_text, btn_color, btn_hover,
++                   card_hover, border_act, command):
++
++        NORMAL_BG = WHITE
++
++        card = tk.Frame(
++            parent,
++            bg=NORMAL_BG,
++            bd=0,
++            highlightbackground=BORDER_CLR,
++            highlightthickness=1,
++            cursor="hand2"
++        )
++
++        card.grid(
++            row=0,
++            column=col,
++            padx=10,
++            sticky="nsew"
++        )
++
++        # Accent line
++        accent = tk.Frame(
++            card,
++            bg=BORDER_CLR,
++            height=4
++        )
++
++        accent.pack(fill="x")
++
++        inner = tk.Frame(
++            card,
++            bg=NORMAL_BG
++        )
++
++        inner.pack(
++            expand=True,
++            fill="both",
++            padx=26,
++            pady=26
++        )
++
++        # ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++        # ICON
++        # ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++        icon_box = tk.Frame(
++            inner,
++            bg=icon_bg,
++            width=64,
++            height=64
++        )
++
++        icon_box.pack(
++            anchor="center",
++            pady=(0, 18)
++        )
++
++        icon_box.pack_propagate(False)
++
++        tk.Label(
++            icon_box,
++            text=icon,
++            font=("Segoe UI Emoji", 28),
++            bg=icon_bg
++        ).pack(expand=True)
++
++        # ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++        # TITLE
++        # ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++        tk.Label(
++            inner,
++            text=title,
++            font=("Segoe UI", 14, "bold"),
++            bg=NORMAL_BG,
++            fg=DARK_TEXT
++        ).pack(anchor="center")
++
++        # ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++        # SUBTITLE
++        # ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++        tk.Label(
++            inner,
++            text=subtitle,
++            font=("Segoe UI", 9),
++            bg=NORMAL_BG,
++            fg=GRAY_TEXT,
++            justify="center"
++        ).pack(
++            anchor="center",
++            pady=(8, 24)
++        )
++
++        # ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++        # BUTTON
++        # ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++        btn_cv = _pill(
++            inner,
++            text=btn_text,
++            command=command,
++
++            w=190,
++            h=42,
++            r=21,
++
++            color=btn_color,
++            hover=btn_hover,
++
++            font=("Segoe UI", 9, "bold")
++        )
++
++        btn_cv.pack(anchor="center")
++
++        # ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++        # HOVER EFFECT
++        # ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++        def _enter(e):
++
++            card.config(
++                bg=card_hover,
++                highlightbackground=border_act
++            )
++
++            accent.config(bg=btn_color)
++
++            inner.config(bg=card_hover)
++
++            btn_cv.config(bg=card_hover)
++
++            for w in inner.winfo_children():
++                try:
++                    if w != icon_box:
++                        w.config(bg=card_hover)
++                except:
++                    pass
++
++        def _leave(e):
++
++            card.config(
++                bg=NORMAL_BG,
++                highlightbackground=BORDER_CLR
++            )
++
++            accent.config(bg=BORDER_CLR)
++
++            inner.config(bg=NORMAL_BG)
++
++            btn_cv.config(bg=NORMAL_BG)
++
++            for w in inner.winfo_children():
++                try:
++                    if w != icon_box:
++                        w.config(bg=NORMAL_BG)
++                except:
++                    pass
++
++        for widget in [card, inner]:
++            widget.bind("<Enter>", _enter)
++            widget.bind("<Leave>", _leave)
++
++    # ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++    # FOOTER
++    # ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++    def _build_footer(self):
++
++        tk.Frame(
++            self,
++            bg=BORDER_CLR,
++            height=1
++        ).pack(fill="x", side="bottom")
++
++        foot = tk.Frame(
++            self,
++            bg=BG_MAIN
++        )
++
++        foot.pack(
++            fill="x",
++            side="bottom"
++        )
++
++        tk.Label(
++            foot,
++            text="┬⌐ 2024 Business Center SMKN 13 Bandung ΓÇö All rights reserved",
++            font=("Segoe UI", 8),
++            bg=BG_MAIN,
++            fg=LIGHT_TEXT
++        ).pack(pady=11)
++
++    # ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++    # NAVIGATION
++    # ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+     def _open_transaksi(self):
++
+         try:
+             from user.transaksi import TransaksiWindow
++
+             self.withdraw()
++
+             win = TransaksiWindow(self)
+-            win.protocol("WM_DELETE_WINDOW", lambda: self._on_child_close(win))
++
++            win.protocol(
++                "WM_DELETE_WINDOW",
++                lambda: self._on_child_close(win)
++            )
++
+         except Exception as e:
+             messagebox.showerror("Error", str(e))
+ 
+     def _open_admin_login(self):
++
+         try:
+             from login_admin import LoginAdmin
++
+             self.withdraw()
++
+             win = LoginAdmin(self)
+-            win.protocol("WM_DELETE_WINDOW", lambda: self._on_child_close(win))
++
++            win.protocol(
++                "WM_DELETE_WINDOW",
++                lambda: self._on_child_close(win)
++            )
++
+         except Exception as e:
+             messagebox.showerror("Error", str(e))
+ 
+     def _on_child_close(self, win):
++
+         win.destroy()
++
+         self.deiconify()
+ 
+ 
+-# ΓöÇΓöÇΓöÇ Entry Point ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++# ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
++# ENTRY POINT
++# ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+ if __name__ == "__main__":
++
++    try:
++        from db import get_connection, run_migrations
++
++        conn = get_connection()
++        conn.close()
++
++        run_migrations()
++
++    except Exception as e:
++
++        root = tk.Tk()
++        root.withdraw()
++
++        messagebox.showerror(
++            "Koneksi Database Gagal",
++
++            f"{e}\n\n"
++            "Pastikan:\n"
++            "1. MySQL sudah berjalan\n"
++            "2. Konfigurasi di db.py sudah benar\n"
++            "3. Sudah menjalankan setup_db.py"
++        )
++
++        sys.exit(1)
++
+     app = MainApp()
+-    app.mainloop()
++    app.mainloop()
+\ No newline at end of file
+diff --git a/user/__pycache__/__init__.cpython-312.pyc b/user/__pycache__/__init__.cpython-312.pyc
+index ff57ce9..aafbd9a 100644
+Binary files a/user/__pycache__/__init__.cpython-312.pyc and b/user/__pycache__/__init__.cpython-312.pyc differ
+diff --git a/user/transaksi.py b/user/transaksi.py
+index 0a26677..4df4b41 100644
+--- a/user/transaksi.py
++++ b/user/transaksi.py
+@@ -1,6 +1,7 @@
+ """
+-user/transaksi.py - Halaman Transaksi User (Tanpa Login) + Foto Produk
++user/transaksi.py - Halaman Transaksi User (Full Redesign Premium)
+ Aplikasi Business Center SMKN 13 Bandung
++Palet: Dark Green #051F20 ΓåÆ Pale Mint #DAF1DE
+ """
+ 
+ import tkinter as tk
+@@ -14,22 +15,33 @@ from db import get_db, get_drive_service, DRIVE_FOLDER_ID, IMAGES_DIR, API_URL
+ 
+ API_BASE_URL = API_URL
+ 
+-PRIMARY    = "#CC0000"
+-PRIMARY_DK = "#A00000"
+-WHITE      = "#FFFFFF"
+-LIGHT_GRAY = "#F5F5F5"
+-DARK_TEXT  = "#212121"
+-GRAY_TEXT  = "#757575"
+-ACCENT_G   = "#2E7D32"
+-ACCENT_G_DK= "#1B5E20"
+-CARD_BG    = "#FFFFFF"
+-CARD_HOVER = "#FFF0F0"
+-SHADOW_CLR = "#E0E0E0"
+-
+-CARD_IMG_SIZE = (90, 90)
+-
+-
++# ΓöÇΓöÇΓöÇ Palet Warna (seragam dengan login_admin.py) ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++C_DARKEST   = "#051F20"   # Sidebar / header gelap
++C_DARK      = "#0B2B26"   # Header hover / elemen gelap
++C_MID       = "#163832"   # Tombol utama
++C_MUTED     = "#235347"   # Aksen sekunder
++C_MINT      = "#8EB69B"   # Border, ikon, teks sekunder hijau
++C_PALE      = "#DAF1DE"   # Background input focus, badge, highlight
++WHITE       = "#FFFFFF"
++BG_MAIN     = "#F4FAF6"   # Background utama sedikit kehijauan
++BG_CARD     = "#FFFFFF"
++BG_CARD_HVR = "#F0FAF4"
++BORDER_CLR  = "#D1E8D8"
++DARK_TEXT   = "#1A2E22"   # Teks utama
++GRAY_TEXT   = "#5C7A68"   # Teks sekunder
++LIGHT_TEXT  = "#9DB8A8"   # Teks hint
++STOCK_OK    = "#163832"
++STOCK_LOW   = "#C07A00"
++STOCK_OUT   = "#B83232"
++REMOVE_CLR  = "#B83232"
++SIDEBAR_W   = 300
++CARD_IMG_SZ = (84, 84)
++COLS        = 3
++
++
++# ΓöÇΓöÇΓöÇ Helper: load foto produk ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+ def _load_card_image(foto: str, stok: int):
++<<<<<<< HEAD
+     """Muat gambar produk dari local atau API. Return None jika tidak ada."""
+     if not foto: return None
+     try:
+@@ -93,6 +105,23 @@ def _load_card_image(foto: str, stok: int):
+                 return _process_card_image(img, stok)
+             
+         return None
++=======
++    try:
++        path = os.path.join(IMAGES_DIR, foto) if foto else None
++        if not (path and os.path.isfile(path)):
++            return None
++        img = Image.open(path).convert("RGBA")
++        img.thumbnail(CARD_IMG_SZ, Image.LANCZOS)
++        canvas = Image.new("RGBA", CARD_IMG_SZ, (255, 255, 255, 0))
++        off = ((CARD_IMG_SZ[0]-img.width)//2, (CARD_IMG_SZ[1]-img.height)//2)
++        canvas.paste(img, off, img)
++        if stok <= 0:
++            d = ImageDraw.Draw(canvas)
++            w, h = CARD_IMG_SZ
++            d.line((8,8,w-8,h-8), fill=(184,50,50,210), width=5)
++            d.line((8,h-8,w-8,8), fill=(184,50,50,210), width=5)
++        return ImageTk.PhotoImage(canvas)
++>>>>>>> 0e8bd3a (feat: redesign halaman utama dan login admin)
+     except Exception:
+         return None
+ 
+@@ -118,18 +147,42 @@ def _process_card_image(img, stok):
+     return ImageTk.PhotoImage(canvas)
+ 
+ 
++# ΓöÇΓöÇΓöÇ Helper: pill button Canvas ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++def _pill(parent, text, command, w=120, h=32, r=16,
++          color=C_MID, hover=C_DARK, fg=WHITE,
++          font=("Segoe UI", 8, "bold")):
++    cv = tk.Canvas(parent, width=w, height=h,
++                   bg=parent["bg"], highlightthickness=0, cursor="hand2")
++    def _draw(fill):
++        cv.delete("all")
++        cv.create_arc(0,0,r*2,h,start=90,extent=180,fill=fill,outline=fill)
++        cv.create_arc(w-r*2,0,w,h,start=270,extent=180,fill=fill,outline=fill)
++        cv.create_rectangle(r,0,w-r,h,fill=fill,outline=fill)
++        cv.create_text(w//2,h//2,text=text,fill=fg,font=font,anchor="center")
++    _draw(color)
++    cv.bind("<Enter>",    lambda e: _draw(hover))
++    cv.bind("<Leave>",    lambda e: _draw(color))
++    cv.bind("<Button-1>", lambda e: command())
++    return cv
++
++
++# ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+ class TransaksiWindow(tk.Toplevel):
++
+     def __init__(self, master):
+         super().__init__(master)
+-        self.master      = master
+-        self.keranjang   = {}   # {id_barang: {"nama","harga","jumlah","stok"}}
+-        self.barang_data = []
+-        self._card_imgs  = {}   # simpan PhotoImage agar tidak GC
+-
+-        self.title("Transaksi - Business Center SMKN 13 Bandung")
+-        self.geometry("1100x660")
+-        self.configure(bg=LIGHT_GRAY)
+-        self._center(1100, 660)
++        self.master            = master
++        self.keranjang         = {}
++        self.barang_data       = []
++        self._card_imgs        = {}
++        self._checkout_enabled = False
++
++        self.title("Transaksi ΓÇö Business Center SMKN 13 Bandung")
++        self.geometry("1200x700")
++        self.minsize(960, 600)
++        self.configure(bg=BG_MAIN)
++        self._center(1200, 700)
++        self._build_styles()
+         self._build_ui()
+         self._load_barang()
+         self.grab_set()
+@@ -140,141 +193,261 @@ class TransaksiWindow(tk.Toplevel):
+         y = (self.winfo_screenheight() - h) // 2
+         self.geometry(f"{w}x{h}+{x}+{y}")
+ 
+-    # ΓöÇΓöÇ Layout utama ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++    # ΓöÇΓöÇ ttk Styles ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++    def _build_styles(self):
++        s = ttk.Style()
++        s.theme_use("default")
++        s.configure("Thin.Vertical.TScrollbar",
++                    gripcount=0, background=C_MINT,
++                    troughcolor=BG_MAIN, borderwidth=0,
++                    arrowsize=0, width=5)
++        s.map("Thin.Vertical.TScrollbar",
++              background=[("active", C_MUTED)])
++        s.configure("Cart.Treeview",
++                    font=("Segoe UI", 9), rowheight=34,
++                    background=WHITE, fieldbackground=WHITE,
++                    foreground=DARK_TEXT, borderwidth=0)
++        s.configure("Cart.Treeview.Heading",
++                    font=("Segoe UI", 8, "bold"),
++                    background=BG_MAIN, foreground=GRAY_TEXT,
++                    relief="flat", borderwidth=0)
++        s.map("Cart.Treeview",
++              background=[("selected", C_PALE)],
++              foreground=[("selected", C_DARKEST)])
++
++    # ΓöÇΓöÇ Layout Utama ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+     def _build_ui(self):
+-        # Header
+-        hdr = tk.Frame(self, bg=PRIMARY, height=62)
++        self._build_header()
++        body = tk.Frame(self, bg=BG_MAIN)
++        body.pack(fill="both", expand=True)
++        self._build_catalog(body)
++        self._build_sidebar(body)
++
++    # ΓöÇΓöÇ Header ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++    def _build_header(self):
++        hdr = tk.Frame(self, bg=C_DARKEST, height=62)
+         hdr.pack(fill="x")
+         hdr.pack_propagate(False)
++<<<<<<< HEAD
+         tk.Label(hdr, text="Transaksi - Business Center SMKN 13 Bandung",
+                  font=("Segoe UI", 13, "bold"), bg=PRIMARY, fg=WHITE).pack(
+                      side="left", padx=20, pady=16)
+         tk.Button(hdr, text="Kembali", font=("Segoe UI", 9),
+                   bg=PRIMARY_DK, fg=WHITE, relief="flat", padx=12, pady=5,
+                   cursor="hand2", command=self._kembali).pack(side="right", padx=16)
++=======
++>>>>>>> 0e8bd3a (feat: redesign halaman utama dan login admin)
++
++        left_f = tk.Frame(hdr, bg=C_DARKEST)
++        left_f.pack(side="left", fill="y", padx=20)
++        tk.Label(left_f, text="≡ƒÅ¬", font=("Segoe UI Emoji", 18),
++                 bg=C_DARKEST).pack(side="left", padx=(0,10))
++        title_col = tk.Frame(left_f, bg=C_DARKEST)
++        title_col.pack(side="left", fill="y", pady=10)
++        tk.Label(title_col,
++                 text="Business Center  SMKN 13 Bandung",
++                 font=("Segoe UI", 12, "bold"),
++                 bg=C_DARKEST, fg=WHITE, anchor="w").pack(anchor="w")
++        tk.Label(title_col, text="Halaman Transaksi Pelanggan",
++                 font=("Segoe UI", 8),
++                 bg=C_DARKEST, fg=C_MINT, anchor="w").pack(anchor="w")
++
++        back = _pill(hdr, text="ΓåÉ Kembali", command=self._kembali,
++                     w=110, h=34, r=17,
++                     color=C_MUTED, hover=C_MID, fg=WHITE,
++                     font=("Segoe UI", 9, "bold"))
++        back.pack(side="right", padx=18, pady=14)
++        back.config(bg=C_DARKEST)
+ 
+-        body = tk.Frame(self, bg=LIGHT_GRAY)
+-        body.pack(fill="both", expand=True)
+-
+-        # ΓöÇΓöÇ Panel kiri: Katalog ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+-        left = tk.Frame(body, bg=LIGHT_GRAY)
+-        left.pack(side="left", fill="both", expand=True, padx=(14, 8), pady=10)
+-
+-        search_row = tk.Frame(left, bg=LIGHT_GRAY)
+-        search_row.pack(fill="x", pady=(0, 6))
+-        tk.Label(search_row, text="Cari Barang:", font=("Segoe UI", 10),
+-                 bg=LIGHT_GRAY, fg=DARK_TEXT).pack(side="left")
++    def _kembali(self):
++        self.destroy()
++        self.master.deiconify()
++
++    # ΓöÇΓöÇ Panel Katalog (kiri) ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++    def _build_catalog(self, body):
++        left = tk.Frame(body, bg=BG_MAIN)
++        left.pack(side="left", fill="both", expand=True,
++                  padx=(16,8), pady=14)
++
++        # Search + Refresh
++        sr = tk.Frame(left, bg=BG_MAIN)
++        sr.pack(fill="x", pady=(0,12))
++
++        sb_outer = tk.Frame(sr, bg=C_MINT, padx=1, pady=1)
++        sb_outer.pack(side="left")
++        sb_inner = tk.Frame(sb_outer, bg=WHITE)
++        sb_inner.pack()
++        tk.Label(sb_inner, text="≡ƒöì", font=("Segoe UI Emoji", 10),
++                 bg=WHITE, fg=C_MINT).pack(side="left", padx=(10,4))
+         self.search_var = tk.StringVar()
+         self.search_var.trace_add("write", lambda *_: self._filter_barang())
+-        tk.Entry(search_row, textvariable=self.search_var,
+-                 font=("Segoe UI", 10), width=22, relief="solid", bd=1).pack(
+-                     side="left", padx=8, ipady=5)
+-        tk.Button(search_row, text="Refresh", font=("Segoe UI", 9),
+-                  bg=LIGHT_GRAY, relief="flat", cursor="hand2",
+-                  command=self._load_barang).pack(side="left")
+-
+-        tk.Label(left, text="Daftar Barang", font=("Segoe UI", 11, "bold"),
+-                 bg=LIGHT_GRAY, fg=DARK_TEXT).pack(anchor="w", pady=(0, 4))
+-
+-        # Canvas scrollable
+-        cont = tk.Frame(left, bg=LIGHT_GRAY)
+-        cont.pack(fill="both", expand=True)
+-
+-        self.cat_canvas = tk.Canvas(cont, bg=LIGHT_GRAY, highlightthickness=0)
+-        cat_sb = ttk.Scrollbar(cont, orient="vertical", command=self.cat_canvas.yview)
+-        self.cat_canvas.configure(yscrollcommand=cat_sb.set)
+-        cat_sb.pack(side="right", fill="y")
++        ent = tk.Entry(sb_inner, textvariable=self.search_var,
++                       font=("Segoe UI", 10), width=28,
++                       relief="flat", bg=WHITE,
++                       fg=DARK_TEXT, insertbackground=C_MID)
++        ent.pack(side="left", ipady=9, padx=(0,10))
++        ent.bind("<FocusIn>",  lambda e: sb_outer.config(bg=C_MID))
++        ent.bind("<FocusOut>", lambda e: sb_outer.config(bg=C_MINT))
++
++        btn_ref = _pill(sr, text="Γå╗  Refresh", command=self._load_barang,
++                        w=96, h=36, r=18,
++                        color=BG_MAIN, hover=C_PALE, fg=C_MID,
++                        font=("Segoe UI", 9, "bold"))
++        btn_ref.pack(side="left", padx=10)
++        btn_ref.config(bg=BG_MAIN)
++
++        # Label section
++        lrow = tk.Frame(left, bg=BG_MAIN)
++        lrow.pack(fill="x", pady=(0,8))
++        tk.Frame(lrow, bg=C_MID, width=4, height=20).pack(side="left")
++        tk.Label(lrow, text="  Daftar Barang",
++                 font=("Segoe UI", 10, "bold"),
++                 bg=BG_MAIN, fg=DARK_TEXT).pack(side="left")
++        self.lbl_prod_count = tk.Label(lrow, text="",
++                                       font=("Segoe UI", 9),
++                                       bg=BG_MAIN, fg=GRAY_TEXT)
++        self.lbl_prod_count.pack(side="left", padx=6)
++
++        # Grid scrollable
++        wrap = tk.Frame(left, bg=BG_MAIN)
++        wrap.pack(fill="both", expand=True)
++        self.cat_canvas = tk.Canvas(wrap, bg=BG_MAIN, highlightthickness=0)
++        vsb = ttk.Scrollbar(wrap, orient="vertical",
++                            command=self.cat_canvas.yview,
++                            style="Thin.Vertical.TScrollbar")
++        self.cat_canvas.configure(yscrollcommand=vsb.set)
++        vsb.pack(side="right", fill="y")
+         self.cat_canvas.pack(side="left", fill="both", expand=True)
+-
+-        self.cat_frame  = tk.Frame(self.cat_canvas, bg=LIGHT_GRAY)
+-        self.cat_window = self.cat_canvas.create_window((0, 0), window=self.cat_frame, anchor="nw")
+-
+-        self.cat_frame.bind("<Configure>",
+-                             lambda e: self.cat_canvas.configure(
+-                                 scrollregion=self.cat_canvas.bbox("all")))
+-        self.cat_canvas.bind("<Configure>",
+-                              lambda e: self.cat_canvas.itemconfig(
+-                                  self.cat_window, width=e.width))
++        self.cat_frame = tk.Frame(self.cat_canvas, bg=BG_MAIN)
++        self.cat_win   = self.cat_canvas.create_window(
++            (0,0), window=self.cat_frame, anchor="nw")
++        self.cat_frame.bind("<Configure>", lambda e:
++            self.cat_canvas.configure(
++                scrollregion=self.cat_canvas.bbox("all")))
++        self.cat_canvas.bind("<Configure>", lambda e:
++            self.cat_canvas.itemconfig(self.cat_win, width=e.width))
+         self.cat_canvas.bind_all("<MouseWheel>",
+-                                  lambda e: self.cat_canvas.yview_scroll(
+-                                      int(-1*(e.delta/120)), "units"))
+-
+-        # ΓöÇΓöÇ Panel kanan: Keranjang ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+-        right = tk.Frame(body, bg=WHITE, width=310)
+-        right.pack(side="right", fill="y", padx=(8, 14), pady=10)
+-        right.pack_propagate(False)
+-
+-        cart_hdr = tk.Frame(right, bg=PRIMARY, height=44)
+-        cart_hdr.pack(fill="x")
+-        cart_hdr.pack_propagate(False)
+-        tk.Label(cart_hdr, text="Keranjang Belanja",
+-                 font=("Segoe UI", 11, "bold"), bg=PRIMARY, fg=WHITE).pack(expand=True)
+-
+-        style = ttk.Style()
+-        style.theme_use("default")
+-        style.configure("Cart.Treeview",
+-                        font=("Segoe UI", 9), rowheight=28,
+-                        background=WHITE, fieldbackground=WHITE, foreground=DARK_TEXT)
+-        style.configure("Cart.Treeview.Heading",
+-                        font=("Segoe UI", 9, "bold"),
+-                        background="#424242", foreground=WHITE, relief="flat")
+-        style.map("Cart.Treeview", background=[("selected", "#FFD6D6")])
+-
+-        cart_tf = tk.Frame(right, bg=WHITE)
+-        cart_tf.pack(fill="both", expand=True)
+-
+-        cart_cols = ("Barang", "Qty", "Subtotal")
+-        self.cart_tree = ttk.Treeview(cart_tf, columns=cart_cols,
+-                                       show="headings", style="Cart.Treeview")
++            lambda e: self.cat_canvas.yview_scroll(
++                int(-1*(e.delta/120)), "units"))
++
++    # ΓöÇΓöÇ Sidebar Keranjang (kanan) ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++    def _build_sidebar(self, body):
++        side = tk.Frame(body, bg=WHITE, width=SIDEBAR_W)
++        side.pack(side="right", fill="y", padx=(8,14), pady=14)
++        side.pack_propagate(False)
++
++        # Header sidebar
++        s_hdr = tk.Frame(side, bg=C_DARKEST, height=56)
++        s_hdr.pack(fill="x")
++        s_hdr.pack_propagate(False)
++        h_inner = tk.Frame(s_hdr, bg=C_DARKEST)
++        h_inner.pack(fill="both", expand=True, padx=16)
++        tk.Label(h_inner, text="≡ƒ¢Æ  Keranjang Belanja",
++                 font=("Segoe UI", 11, "bold"),
++                 bg=C_DARKEST, fg=WHITE).pack(side="left", pady=16)
++        self.badge = tk.Label(h_inner, text="",
++                              font=("Segoe UI", 8, "bold"),
++                              bg=STOCK_OUT, fg=WHITE,
++                              padx=7, pady=2)
++        self.badge.pack(side="right", pady=18)
++
++        # Treeview
++        tree_wrap = tk.Frame(side, bg=WHITE)
++        tree_wrap.pack(fill="both", expand=True)
++        cols = ("Barang", "Qty", "Subtotal")
++        self.cart_tree = ttk.Treeview(
++            tree_wrap, columns=cols, show="headings",
++            style="Cart.Treeview", selectmode="browse")
+         self.cart_tree.heading("Barang",   text="Nama Barang")
+         self.cart_tree.heading("Qty",      text="Qty")
+         self.cart_tree.heading("Subtotal", text="Subtotal")
+-        self.cart_tree.column("Barang",   width=130, anchor="w")
+-        self.cart_tree.column("Qty",      width=36,  anchor="center")
+-        self.cart_tree.column("Subtotal", width=100, anchor="e")
+-        cart_sb2 = ttk.Scrollbar(cart_tf, orient="vertical", command=self.cart_tree.yview)
+-        self.cart_tree.configure(yscrollcommand=cart_sb2.set)
+-        cart_sb2.pack(side="right", fill="y")
++        self.cart_tree.column("Barang",   width=130, anchor="w",  stretch=True)
++        self.cart_tree.column("Qty",      width=34,  anchor="center", stretch=False)
++        self.cart_tree.column("Subtotal", width=96,  anchor="e",  stretch=False)
++        tsb = ttk.Scrollbar(tree_wrap, orient="vertical",
++                            command=self.cart_tree.yview,
++                            style="Thin.Vertical.TScrollbar")
++        self.cart_tree.configure(yscrollcommand=tsb.set)
++        tsb.pack(side="right", fill="y")
+         self.cart_tree.pack(fill="both", expand=True)
+ 
+-        tk.Button(right, text="Hapus Item Dipilih",
+-                  font=("Segoe UI", 9), bg=LIGHT_GRAY, fg=PRIMARY, relief="flat",
+-                  pady=5, cursor="hand2", command=self._hapus_item).pack(fill="x")
+-
+-        tk.Frame(right, bg=SHADOW_CLR, height=1).pack(fill="x")
+-
+-        total_f = tk.Frame(right, bg=WHITE)
+-        total_f.pack(fill="x", padx=14, pady=8)
+-        tk.Label(total_f, text="Total:", font=("Segoe UI", 10),
++        tk.Frame(side, bg=BORDER_CLR, height=1).pack(fill="x")
++
++        # Aksi
++        act = tk.Frame(side, bg=WHITE)
++        act.pack(fill="x")
++        tk.Button(act, text="Γ£ò  Hapus Item",
++                  font=("Segoe UI", 8), bg=WHITE, fg=REMOVE_CLR,
++                  relief="flat", pady=8, cursor="hand2",
++                  activebackground="#FFF0F0",
++                  command=self._hapus_item).pack(side="left", fill="x", expand=True)
++        tk.Frame(act, bg=BORDER_CLR, width=1).pack(side="left", fill="y")
++        tk.Button(act, text="≡ƒùæ  Kosongkan",
++                  font=("Segoe UI", 8), bg=WHITE, fg=GRAY_TEXT,
++                  relief="flat", pady=8, cursor="hand2",
++                  activebackground=BG_MAIN,
++                  command=self._kosongkan).pack(side="left", fill="x", expand=True)
++
++        tk.Frame(side, bg=BORDER_CLR, height=1).pack(fill="x")
++
++        # Total
++        tot_f = tk.Frame(side, bg=WHITE)
++        tot_f.pack(fill="x", padx=16, pady=12)
++        top = tk.Frame(tot_f, bg=WHITE)
++        top.pack(fill="x")
++        tk.Label(top, text="Total Belanja",
++                 font=("Segoe UI", 9),
+                  bg=WHITE, fg=GRAY_TEXT).pack(side="left")
+-        self.lbl_total = tk.Label(total_f, text="Rp 0",
+-                                   font=("Segoe UI", 14, "bold"),
+-                                   bg=WHITE, fg=PRIMARY)
+-        self.lbl_total.pack(side="right")
+-
+-        self.lbl_item_count = tk.Label(right, text="0 jenis item",
+-                                        font=("Segoe UI", 9), bg=WHITE, fg=GRAY_TEXT)
+-        self.lbl_item_count.pack(anchor="e", padx=14)
+-
+-        self.btn_checkout = tk.Button(right, text="CHECKOUT",
+-                                       font=("Segoe UI", 13, "bold"),
+-                                       bg=ACCENT_G, fg=WHITE, relief="flat",
+-                                       pady=12, cursor="hand2", state="disabled",
+-                                       activebackground=ACCENT_G_DK, command=self._checkout)
+-        self.btn_checkout.pack(fill="x", pady=(6, 0))
+-
+-        tk.Button(right, text="Kosongkan Keranjang",
+-                  font=("Segoe UI", 9), bg=LIGHT_GRAY, fg=GRAY_TEXT,
+-                  relief="flat", pady=6, cursor="hand2",
+-                  command=self._kosongkan).pack(fill="x")
+-
+-        self.lbl_notif = tk.Label(right, text="", font=("Segoe UI", 9),
+-                                   bg=WHITE, fg=ACCENT_G, wraplength=280, justify="center")
+-        self.lbl_notif.pack(fill="x", padx=8, pady=4)
+-
+-    # ΓöÇΓöÇ Katalog ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++        self.lbl_item_count = tk.Label(top, text="0 item",
++                                       font=("Segoe UI", 8),
++                                       bg=WHITE, fg=LIGHT_TEXT)
++        self.lbl_item_count.pack(side="right")
++        self.lbl_total = tk.Label(tot_f, text="Rp 0",
++                                   font=("Segoe UI", 22, "bold"),
++                                   bg=WHITE, fg=C_MID)
++        self.lbl_total.pack(anchor="e", pady=(4,0))
++
++        # Notif
++        self.lbl_notif = tk.Label(side, text="",
++                                   font=("Segoe UI", 8),
++                                   bg=WHITE, fg=STOCK_OK,
++                                   wraplength=270, justify="center")
++        self.lbl_notif.pack(fill="x", padx=10, pady=(0,4))
++
++        # Checkout canvas button
++        self.checkout_cv = tk.Canvas(side, width=SIDEBAR_W, height=52,
++                                      bg=WHITE, highlightthickness=0)
++        self.checkout_cv.pack(fill="x")
++        self._draw_checkout(False)
++        self.checkout_cv.bind("<Button-1>", lambda e: self._checkout())
++
++    def _draw_checkout(self, enabled: bool):
++        cv   = self.checkout_cv
++        w, h = SIDEBAR_W, 52
++        fill = C_MID if enabled else C_MINT
++        txt  = "CHECKOUT  ΓåÆ" if enabled else "Keranjang Kosong"
++        cv.delete("all")
++        cv.create_rectangle(0, 0, w, h, fill=fill, outline=fill)
++        cv.create_text(w//2, h//2, text=txt,
++                       fill=WHITE, font=("Segoe UI", 12, "bold"),
++                       anchor="center")
++        cv.config(cursor="hand2" if enabled else "arrow")
++        self._checkout_enabled = enabled
++        if enabled:
++            cv.bind("<Enter>", lambda e: (
++                cv.delete("all"),
++                cv.create_rectangle(0,0,w,h,fill=C_DARK,outline=C_DARK),
++                cv.create_text(w//2,h//2,text=txt,fill=WHITE,
++                               font=("Segoe UI",12,"bold"),anchor="center")))
++            cv.bind("<Leave>", lambda e: self._draw_checkout(True))
++        else:
++            cv.unbind("<Enter>")
++            cv.unbind("<Leave>")
++
++    # ΓöÇΓöÇ Load & Render ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+     def _load_barang(self):
+         try:
++<<<<<<< HEAD
+             db = get_db()
+             docs = db.collection('barang').stream()
+             self.barang_data = []
+@@ -283,23 +456,32 @@ class TransaksiWindow(tk.Toplevel):
+                 b["id_barang"] = doc.id
+                 self.barang_data.append(b)
+             self.barang_data.sort(key=lambda x: x.get("nama_barang", "").lower())
++=======
++            self.barang_data = execute_query(
++                "SELECT id_barang, nama_barang, harga_barang, stok, foto "
++                "FROM barang ORDER BY nama_barang",
++                fetch=True)
++>>>>>>> 0e8bd3a (feat: redesign halaman utama dan login admin)
+         except Exception as e:
+-            messagebox.showerror("Error DB", str(e))
++            messagebox.showerror("Error DB", str(e), parent=self)
+             self.barang_data = []
+         self.search_var.set("")
+         self._render_katalog(self.barang_data)
+ 
+     def _filter_barang(self):
+         kw = self.search_var.get().lower()
+-        self._render_katalog([b for b in self.barang_data if kw in b["nama_barang"].lower()])
++        self._render_katalog(
++            [b for b in self.barang_data
++             if kw in b["nama_barang"].lower()])
+ 
+     def _render_katalog(self, data):
+         for w in self.cat_frame.winfo_children():
+             w.destroy()
+         self._card_imgs.clear()
+-
+-        COLS = 3
++        self.lbl_prod_count.config(
++            text=f"({len(data)} produk)" if data else "")
+         for idx, item in enumerate(data):
++<<<<<<< HEAD
+             try:
+                 r, c = divmod(idx, COLS)
+                 self._make_card(item, r, c)
+@@ -308,10 +490,19 @@ class TransaksiWindow(tk.Toplevel):
+                 print(f"Error rendering item {item.get('id_barang')}: {e}")
+                 continue
+ 
++=======
++            r, c = divmod(idx, COLS)
++            self._make_card(item, r, c)
++        for c in range(COLS):
++            self.cat_frame.grid_columnconfigure(c, weight=1, uniform="col")
++>>>>>>> 0e8bd3a (feat: redesign halaman utama dan login admin)
+         if not data:
+-            tk.Label(self.cat_frame, text="Tidak ada barang.",
+-                     font=("Segoe UI", 11), bg=LIGHT_GRAY, fg=GRAY_TEXT).grid(
+-                         column=0, row=0, padx=20, pady=30)
++            tk.Label(self.cat_frame,
++                     text="Tidak ada produk ditemukan.",
++                     font=("Segoe UI", 11),
++                     bg=BG_MAIN, fg=LIGHT_TEXT
++                     ).grid(column=0, row=0, columnspan=COLS,
++                            padx=20, pady=60)
+ 
+     def _make_card(self, item, row, col):
+         id_b  = item["id_barang"]
+@@ -322,60 +513,107 @@ class TransaksiWindow(tk.Toplevel):
+             harga = 0
+         stok  = item["stok"]
+         foto  = item.get("foto")
++        oos   = stok <= 0
+ 
+-        card = tk.Frame(self.cat_frame, bg=CARD_BG, relief="flat",
+-                        highlightbackground=SHADOW_CLR, highlightthickness=1,
+-                        width=200, height=200)
+-        card.grid(row=row, column=col, padx=6, pady=6, sticky="nsew")
++        card = tk.Frame(self.cat_frame, bg=BG_CARD,
++                        highlightbackground=BORDER_CLR,
++                        highlightthickness=1,
++                        width=208, height=222)
++        card.grid(row=row, column=col, padx=7, pady=7, sticky="nsew")
+         card.pack_propagate(False)
+-
+-        # ΓöÇΓöÇ Foto produk / ikon default ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+-        img = _load_card_image(foto, stok)
+-        if img:
+-            self._card_imgs[id_b] = img
+-            img_lbl = tk.Label(card, image=img, bg=CARD_BG)
+-            img_lbl.pack(pady=(10, 2))
++        card.grid_propagate(False)
++
++        # Garis aksen atas
++        tk.Frame(card, bg=C_MINT if not oos else "#CCCCCC",
++                 height=3).pack(fill="x")
++
++        # Area gambar
++        img_area = tk.Frame(card,
++                            bg=C_PALE if not oos else "#F0F0F0",
++                            width=84, height=84)
++        img_area.pack(pady=(12,4))
++        img_area.pack_propagate(False)
++
++        photo = _load_card_image(foto, stok)
++        if photo:
++            self._card_imgs[id_b] = photo
++            tk.Label(img_area, image=photo,
++                     bg=img_area["bg"]).pack(expand=True)
++        else:
++            if oos:
++                cv_ph = tk.Canvas(img_area, width=84, height=84,
++                                  bg="#F0F0F0", highlightthickness=0)
++                cv_ph.pack()
++                cv_ph.create_text(42,42,text="≡ƒôª",
++                                  font=("Segoe UI Emoji",24), fill="#CCCCCC")
++                cv_ph.create_line(10,10,74,74,fill=STOCK_OUT,width=4)
++                cv_ph.create_line(10,74,74,10,fill=STOCK_OUT,width=4)
++            else:
++                tk.Label(img_area, text="≡ƒôª",
++                         font=("Segoe UI Emoji", 28),
++                         bg=C_PALE).pack(expand=True)
++
++        # Nama
++        tk.Label(card, text=nama,
++                 font=("Segoe UI", 9, "bold"),
++                 bg=BG_CARD, fg=DARK_TEXT,
++                 wraplength=188, justify="center").pack(padx=6)
++
++        # Harga
++        tk.Label(card, text=f"Rp {harga:,.0f}",
++                 font=("Segoe UI", 11, "bold"),
++                 bg=BG_CARD, fg=C_MID).pack(pady=(1,0))
++
++        # Stok
++        if stok > 5:
++            sc, st = STOCK_OK,  f"ΓùÅ Stok: {stok}"
++        elif stok > 0:
++            sc, st = STOCK_LOW, f"ΓÜá Stok: {stok} (menipis)"
+         else:
+-            img_lbl = tk.Label(card, text="≡ƒôª", font=("Segoe UI", 30), bg=CARD_BG)
+-            img_lbl.pack(pady=(10, 2))
+-
+-        tk.Label(card, text=nama, font=("Segoe UI", 9, "bold"),
+-                 bg=CARD_BG, fg=DARK_TEXT, wraplength=175, justify="center").pack(padx=4)
+-        tk.Label(card, text=f"Rp {harga:,.0f}", font=("Segoe UI", 10, "bold"),
+-                 bg=CARD_BG, fg=PRIMARY).pack()
+-
+-        stok_color = ACCENT_G if stok > 5 else ("#E65100" if stok > 0 else PRIMARY_DK)
+-        stok_text  = f"Stok: {stok}" if stok > 0 else "Stok Habis"
+-        tk.Label(card, text=stok_text, font=("Segoe UI", 8),
+-                 bg=CARD_BG, fg=stok_color).pack()
+-
+-        if stok > 0:
+-            btn = tk.Button(card, text="+ Tambah", font=("Segoe UI", 8, "bold"),
+-                            bg=PRIMARY, fg=WHITE, relief="flat", padx=10, pady=3,
+-                            cursor="hand2",
+-                            command=lambda i=item: self._tambah_ke_keranjang(i))
+-            btn.pack(pady=(4, 8))
+-
+-            # Hover hanya di frame & label, bukan button
+-            for w in [card, img_lbl]:
+-                w.bind("<Enter>", lambda e, c=card: c.config(bg=CARD_HOVER))
+-                w.bind("<Leave>", lambda e, c=card: c.config(bg=CARD_BG))
++            sc, st = STOCK_OUT, "Γ£ò Stok Habis"
++        tk.Label(card, text=st, font=("Segoe UI", 7, "bold"),
++                 bg=BG_CARD, fg=sc).pack()
++
++        # Tombol / label
++        if not oos:
++            btn = _pill(card, text="+ Tambah",
++                        command=lambda i=item: self._tambah_ke_keranjang(i),
++                        w=116, h=30, r=15,
++                        color=C_MID, hover=C_DARK,
++                        font=("Segoe UI", 8, "bold"))
++            btn.pack(pady=(5,10))
++            btn.config(bg=BG_CARD)
++            card.bind("<Enter>", lambda e, c=card: (
++                c.config(bg=BG_CARD_HVR,
++                         highlightbackground=C_MINT)))
++            card.bind("<Leave>", lambda e, c=card: (
++                c.config(bg=BG_CARD,
++                         highlightbackground=BORDER_CLR)))
+         else:
+-            tk.Label(card, text="Stok Habis", font=("Segoe UI", 8),
+-                     bg=CARD_BG, fg=GRAY_TEXT).pack(pady=(4, 8))
++            tk.Label(card, text="Tidak Tersedia",
++                     font=("Segoe UI", 8), bg=BG_CARD,
++                     fg=LIGHT_TEXT).pack(pady=(5,10))
+ 
+-    # ΓöÇΓöÇ Keranjang ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++    # ΓöÇΓöÇ Logika Keranjang ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+     def _tambah_ke_keranjang(self, item):
+         id_b = item["id_barang"]
+         try:
++<<<<<<< HEAD
+             db = get_db()
+             doc = db.collection('barang').document(id_b).get()
+             stok_db = doc.to_dict().get("stok", 0) if doc.exists else 0
++=======
++            cur     = execute_query(
++                "SELECT stok FROM barang WHERE id_barang=%s",
++                (id_b,), fetch=True)
++            stok_db = cur[0]["stok"] if cur else 0
++>>>>>>> 0e8bd3a (feat: redesign halaman utama dan login admin)
+         except Exception:
+             stok_db = item.get("stok", 0)
+ 
+         if id_b in self.keranjang:
+             if self.keranjang[id_b]["jumlah"] >= stok_db:
++<<<<<<< HEAD
+                 self._notif(f"Stok \"{item.get('nama_barang', '')}\" tidak mencukupi!", error=True)
+                 return
+             self.keranjang[id_b]["jumlah"] += 1
+@@ -395,42 +633,80 @@ class TransaksiWindow(tk.Toplevel):
+         if sel:
+             del self.keranjang[str(sel[0])]
+             self._update_cart_ui()
++=======
++                self._notif(f"Stok \"{item['nama_barang']}\" tidak mencukupi!", err=True)
++                return
++            self.keranjang[id_b]["jumlah"] += 1
++        else:
++            if stok_db == 0:
++                self._notif("Stok habis!", err=True)
++                return
++            self.keranjang[id_b] = {
++                "nama":   item["nama_barang"],
++                "harga":  float(item["harga_barang"]),
++                "jumlah": 1,
++                "stok":   stok_db,
++            }
++        self._update_cart()
++        self._notif(f"Γ£ô  \"{item['nama_barang']}\" ditambahkan.")
++
++    def _hapus_item(self):
++        sel = self.cart_tree.selection()
++        if not sel:
++            self._notif("Pilih item yang ingin dihapus.", err=True)
++            return
++        id_b = int(sel[0])
++        nama = self.keranjang[id_b]["nama"]
++        del self.keranjang[id_b]
++        self._update_cart()
++        self._notif(f"Γ£ò  \"{nama}\" dihapus.")
++>>>>>>> 0e8bd3a (feat: redesign halaman utama dan login admin)
+ 
+     def _kosongkan(self):
+-        if self.keranjang and messagebox.askyesno("Kosongkan", "Kosongkan keranjang?", parent=self):
++        if not self.keranjang:
++            return
++        if messagebox.askyesno("Kosongkan Keranjang",
++                                "Yakin ingin mengosongkan keranjang?",
++                                parent=self):
+             self.keranjang.clear()
+-            self._update_cart_ui()
++            self._update_cart()
+ 
+-    def _update_cart_ui(self):
+-        for item in self.cart_tree.get_children():
+-            self.cart_tree.delete(item)
++    def _update_cart(self):
++        for row in self.cart_tree.get_children():
++            self.cart_tree.delete(row)
+         total = 0
++        total_qty = 0
+         for id_b, d in self.keranjang.items():
+-            sub    = d["harga"] * d["jumlah"]
+-            total += sub
+-            self.cart_tree.insert("", "end", iid=str(id_b),
+-                                  values=(d["nama"], d["jumlah"], f"Rp {sub:,.0f}"))
+-        self.lbl_total.config(text=f"Rp {total:,.0f}")
++            sub        = d["harga"] * d["jumlah"]
++            total     += sub
++            total_qty += d["jumlah"]
++            self.cart_tree.insert(
++                "", "end", iid=str(id_b),
++                values=(d["nama"], d["jumlah"], f"Rp {sub:,.0f}"))
+         n = len(self.keranjang)
+-        self.lbl_item_count.config(text=f"{n} jenis item")
+-        self.btn_checkout.config(state="normal" if n > 0 else "disabled")
++        self.lbl_total.config(text=f"Rp {total:,.0f}")
++        self.lbl_item_count.config(
++            text=f"{n} jenis ┬╖ {total_qty} item" if n else "0 item")
++        self.badge.config(text=f" {n} " if n else "")
++        self._draw_checkout(enabled=n > 0)
+ 
+     # ΓöÇΓöÇ Checkout ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+     def _checkout(self):
+-        if not self.keranjang:
++        if not self._checkout_enabled or not self.keranjang:
+             return
+         total     = sum(v["harga"]*v["jumlah"] for v in self.keranjang.values())
+         item_list = "\n".join(
+-            f"  - {v['nama']} x{v['jumlah']} = Rp {v['harga']*v['jumlah']:,.0f}"
+-            for v in self.keranjang.values()
+-        )
+-        if not messagebox.askyesno("Konfirmasi Checkout",
+-                                    f"Pesanan Anda:\n{item_list}\n\n"
+-                                    f"Total: Rp {total:,.0f}\n\n"
+-                                    "Lanjutkan? (Menunggu konfirmasi admin)",
+-                                    parent=self):
++            f"  ΓÇó {v['nama']}  x{v['jumlah']}  =  Rp {v['harga']*v['jumlah']:,.0f}"
++            for v in self.keranjang.values())
++        if not messagebox.askyesno(
++                "Konfirmasi Pesanan",
++                f"Pesanan Anda:\n{item_list}\n\n"
++                f"Total: Rp {total:,.0f}\n\n"
++                "Lanjutkan? (Menunggu konfirmasi admin)",
++                parent=self):
+             return
+         try:
++<<<<<<< HEAD
+             import datetime
+             db = get_db()
+             doc_ref = db.collection('pesanan').document()
+@@ -453,38 +729,65 @@ class TransaksiWindow(tk.Toplevel):
+             })
+             
+             id_pesanan = doc_ref.id[:8]
++=======
++            conn   = get_connection()
++            cursor = conn.cursor()
++            cursor.execute(
++                "INSERT INTO pesanan (total_harga, status) VALUES (%s,'pending')",
++                (total,))
++            id_pesanan = cursor.lastrowid
++            for id_b, d in self.keranjang.items():
++                cursor.execute(
++                    "INSERT INTO detail_pesanan "
++                    "(id_pesanan, id_barang, jumlah, subtotal) "
++                    "VALUES (%s,%s,%s,%s)",
++                    (id_pesanan, id_b, d["jumlah"], d["harga"]*d["jumlah"]))
++            conn.commit()
++            cursor.close()
++            conn.close()
++>>>>>>> 0e8bd3a (feat: redesign halaman utama dan login admin)
+             self._show_sukses(id_pesanan, total)
+             self.keranjang.clear()
+-            self._update_cart_ui()
++            self._update_cart()
+             self._load_barang()
+         except Exception as e:
+             messagebox.showerror("Error", str(e), parent=self)
+ 
++    # ΓöÇΓöÇ Popup Sukses ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+     def _show_sukses(self, id_pesanan, total):
+         pop = tk.Toplevel(self)
+         pop.title("Pesanan Berhasil")
+-        pop.geometry("360x290")
++        pop.geometry("400x320")
+         pop.resizable(False, False)
+         pop.configure(bg=WHITE)
+         pop.transient(self)
+         pop.grab_set()
+-        x = self.winfo_x() + (self.winfo_width()-360)//2
+-        y = self.winfo_y() + (self.winfo_height()-290)//2
+-        pop.geometry(f"360x290+{x}+{y}")
++        x = self.winfo_x() + (self.winfo_width()  - 400) // 2
++        y = self.winfo_y() + (self.winfo_height() - 320) // 2
++        pop.geometry(f"400x320+{x}+{y}")
++
++        tk.Frame(pop, bg=C_DARKEST, height=6).pack(fill="x")
++
++        ic = tk.Frame(pop, bg=C_PALE, width=68, height=68)
++        ic.pack(pady=(24,6))
++        ic.pack_propagate(False)
++        tk.Label(ic, text="Γ£ô", font=("Segoe UI", 30, "bold"),
++                 bg=C_PALE, fg=C_MID).pack(expand=True)
+ 
+-        tk.Frame(pop, bg=ACCENT_G, height=8).pack(fill="x")
+         tk.Label(pop, text="Pesanan Berhasil!",
+-                 font=("Segoe UI", 16, "bold"), bg=WHITE, fg=DARK_TEXT).pack(pady=(20, 4))
++                 font=("Segoe UI", 15, "bold"),
++                 bg=WHITE, fg=DARK_TEXT).pack()
+         tk.Label(pop, text=f"ID Pesanan: #{id_pesanan}",
+-                 font=("Segoe UI", 11), bg=WHITE, fg=GRAY_TEXT).pack()
+-        tk.Label(pop, text=f"Total: Rp {total:,.0f}",
+-                 font=("Segoe UI", 13, "bold"), bg=WHITE, fg=PRIMARY).pack(pady=4)
++                 font=("Segoe UI", 9),
++                 bg=WHITE, fg=GRAY_TEXT).pack(pady=(2,0))
++        tk.Label(pop, text=f"Rp {total:,.0f}",
++                 font=("Segoe UI", 20, "bold"),
++                 bg=WHITE, fg=C_MID).pack(pady=6)
+         tk.Label(pop, text="Menunggu konfirmasi admin...",
+-                 font=("Segoe UI", 10), bg=WHITE, fg="#E65100").pack(pady=(4, 16))
+-        tk.Button(pop, text="OK, Tutup", font=("Segoe UI", 11, "bold"),
+-                  bg=ACCENT_G, fg=WHITE, relief="flat", padx=20, pady=8,
+-                  cursor="hand2", command=pop.destroy).pack()
++                 font=("Segoe UI", 9),
++                 bg=WHITE, fg=STOCK_LOW).pack()
+ 
++<<<<<<< HEAD
+     def _kembali(self):
+         """Tutup window transaksi dan kembali ke halaman pilih mode."""
+         if hasattr(self.master, "_on_child_close"):
+@@ -495,5 +798,18 @@ class TransaksiWindow(tk.Toplevel):
+ 
+     def _notif(self, msg: str, error: bool = False):
+         self.lbl_notif.config(text=msg, fg=PRIMARY if error else ACCENT_G)
++=======
++        ok_btn = _pill(pop, text="OK, Tutup", command=pop.destroy,
++                       w=160, h=40, r=20,
++                       color=C_MID, hover=C_DARK,
++                       font=("Segoe UI", 10, "bold"))
++        ok_btn.config(bg=WHITE)
++        ok_btn.pack(pady=18)
++
++    # ΓöÇΓöÇ Notifikasi ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++    def _notif(self, msg: str, err: bool = False):
++        self.lbl_notif.config(
++            text=msg, fg=STOCK_OUT if err else STOCK_OK)
++>>>>>>> 0e8bd3a (feat: redesign halaman utama dan login admin)
+         if msg:
+             self.after(3000, lambda: self.lbl_notif.config(text=""))
+\ No newline at end of file
