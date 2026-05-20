@@ -394,6 +394,15 @@ class KonfirmasiPanel(tk.Frame):
                        font=("Segoe UI", 10, "bold"))
             b2.config(bg=WHITE)
             b2.pack()
+            
+            if pay_meth.lower() != "cash":
+                b3 = _pill(self.aksi_frame, text="🔄  Cek Status Midtrans",
+                           command=self._cek_status_midtrans,
+                           w=260, h=42, r=21,
+                           color="#0288D1", hover="#01579B",
+                           font=("Segoe UI", 10, "bold"))
+                b3.config(bg=WHITE)
+                b3.pack(pady=(8,0))
         else:
             # Selesai (diterima atau ditolak)
             self.lbl_aksi_notif.config(
@@ -514,6 +523,60 @@ class KonfirmasiPanel(tk.Frame):
                                         values=(dr.get("nama_barang", ""), dr.get("jumlah", 0), sub))
         except Exception as e:
             messagebox.showerror("Error DB", str(e), parent=self)
+
+    def _cek_status_midtrans(self):
+        if not self.selected_id:
+            return
+        
+        try:
+            import midtransclient
+            from midtrans_config import MIDTRANS_SERVER_KEY, MIDTRANS_CLIENT_KEY, MIDTRANS_IS_PRODUCTION
+            from midtrans_webhook import _update_payment
+            
+            core = midtransclient.CoreApi(
+                is_production=MIDTRANS_IS_PRODUCTION,
+                server_key=MIDTRANS_SERVER_KEY,
+                client_key=MIDTRANS_CLIENT_KEY
+            )
+            
+            order_id = f"BC-{self.selected_id}"
+            try:
+                resp = core.transactions.status(order_id)
+            except Exception as e:
+                if "404" in str(e):
+                    messagebox.showinfo("Midtrans", "Pesanan belum dibayar (atau belum terdaftar di Midtrans).", parent=self)
+                else:
+                    messagebox.showerror("Error Midtrans", str(e), parent=self)
+                return
+            
+            tx_status    = resp.get("transaction_status", "")
+            fraud_status = resp.get("fraud_status", "")
+            payment_type = resp.get("payment_type", "")
+            tx_id        = resp.get("transaction_id", "")
+
+            if tx_status == "capture":
+                pay_status = "paid" if fraud_status == "accept" else "failed"
+            elif tx_status == "settlement":
+                pay_status = "paid"
+            elif tx_status in ("cancel", "deny", "failure"):
+                pay_status = "failed"
+            elif tx_status == "expire":
+                pay_status = "expired"
+            elif tx_status == "pending":
+                pay_status = "pending"
+            else:
+                pay_status = tx_status
+
+            if pay_status != "pending":
+                _update_payment(self.selected_id, pay_status, payment_type, tx_id)
+                messagebox.showinfo("Midtrans", f"Status berhasil diperbarui dari Midtrans!\nStatus baru: {pay_status.upper()}", parent=self)
+                self._load_pesanan()
+                self._load_detail(self.selected_id)
+            else:
+                messagebox.showinfo("Midtrans", "Status di Midtrans masih PENDING (Belum Lunas).", parent=self)
+                
+        except Exception as e:
+            messagebox.showerror("Error", str(e), parent=self)
 
     def _confirm_cash_manual(self):
         if not self.selected_id: return

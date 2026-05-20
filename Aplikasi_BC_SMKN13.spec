@@ -6,7 +6,7 @@ a = Analysis(
     pathex=[],
     binaries=[],
     datas=[
-        ('bcr1-f138d-firebase-adminsdk-fbsvc-80d050eafd.json', '.'),
+        ('bcr1-f138d-firebase-adminsdk-fbsvc-bc6fce25a5.json', '.'),
         ('client_secret_566200628496-j4aftfn1hfc7id1c7ju35csr38mnl97m.apps.googleusercontent.com.json', '.')
     ],
     hiddenimports=['user.transaksi', 'login_admin', 'admin.dashboard', 'admin.barang', 'admin.konfirmasi', 'admin.pembayaran', 'midtrans_webhook', 'midtrans_snap', 'midtrans_config'],

@@ -94,6 +94,11 @@ class PembayaranPanel(tk.Frame):
                                      command=self._reject_payment)
         self.btn_reject.pack(side="right", padx=5)
 
+        self.btn_cek = tk.Button(filter_frame, text="🔄 Cek Status Midtrans", font=("Segoe UI", 9, "bold"),
+                                     bg="#0288D1", fg=WHITE, relief="flat", padx=12, pady=4, state="disabled",
+                                     command=self._cek_midtrans)
+        self.btn_cek.pack(side="right", padx=5)
+
         # Legend
         legend = tk.Frame(self, bg=WHITE)
         legend.pack(fill="x", padx=20, pady=(8, 0))
@@ -234,6 +239,11 @@ class PembayaranPanel(tk.Frame):
         else:
             self.btn_paid.config(state="disabled")
             self.btn_reject.config(state="disabled")
+            
+        if raw_status == "pending" and vals[4].lower() != "cash":
+            self.btn_cek.config(state="normal")
+        else:
+            self.btn_cek.config(state="disabled")
 
     def _confirm_paid(self):
         sel = self.tv.selection()
@@ -275,6 +285,61 @@ class PembayaranPanel(tk.Frame):
                 self._load()
             except Exception as e:
                 messagebox.showerror("Error", str(e))
+
+    def _cek_midtrans(self):
+        sel = self.tv.selection()
+        if not sel: return
+        oid = sel[0] # Full Firestore doc.id
+        short_id = self.tv.item(sel[0], "values")[0]
+        
+        try:
+            import midtransclient
+            from midtrans_config import MIDTRANS_SERVER_KEY, MIDTRANS_CLIENT_KEY, MIDTRANS_IS_PRODUCTION
+            from midtrans_webhook import _update_payment
+            
+            core = midtransclient.CoreApi(
+                is_production=MIDTRANS_IS_PRODUCTION,
+                server_key=MIDTRANS_SERVER_KEY,
+                client_key=MIDTRANS_CLIENT_KEY
+            )
+            
+            order_id = f"BC-{oid}"
+            try:
+                resp = core.transactions.status(order_id)
+            except Exception as e:
+                if "404" in str(e):
+                    messagebox.showinfo("Midtrans", "Pesanan belum dibayar (atau belum terdaftar di Midtrans).")
+                else:
+                    messagebox.showerror("Error Midtrans", str(e))
+                return
+            
+            tx_status    = resp.get("transaction_status", "")
+            fraud_status = resp.get("fraud_status", "")
+            payment_type = resp.get("payment_type", "")
+            tx_id        = resp.get("transaction_id", "")
+
+            if tx_status == "capture":
+                pay_status = "paid" if fraud_status == "accept" else "failed"
+            elif tx_status == "settlement":
+                pay_status = "paid"
+            elif tx_status in ("cancel", "deny", "failure"):
+                pay_status = "failed"
+            elif tx_status == "expire":
+                pay_status = "expired"
+            elif tx_status == "pending":
+                pay_status = "pending"
+            else:
+                pay_status = tx_status
+
+            if pay_status != "pending":
+                _update_payment(oid, pay_status, payment_type, tx_id)
+                messagebox.showinfo("Midtrans", f"Status berhasil diperbarui dari Midtrans!\nStatus baru: {pay_status.upper()}")
+                self._load()
+            else:
+                messagebox.showinfo("Midtrans", "Status di Midtrans masih PENDING (Belum Lunas).")
+                
+        except Exception as e:
+            messagebox.showerror("Error", str(e))
 
     # ── Auto-refresh ──────────────────────────────────────────────────────────
     def _start_auto_refresh(self):

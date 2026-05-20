@@ -2,3 +2,20 @@
 migrate/*.json
 migrate/config_gdrive/
 migrate/
+
+# Python cache and build artifacts
+__pycache__/
+*.pyc
+build/
+dist/
+*.spec
+*.patch
+*.zip
+*.rar
+scratch/
+
+# Sensitive credentials
+*firebase-adminsdk*.json
+client_secret*.json
+token.json
+config.json
