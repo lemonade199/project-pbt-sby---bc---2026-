@@ -169,6 +169,7 @@ class AdminDashboard(tk.Toplevel):
             ("📦", "Kelola Barang",       "barang"),
             ("📋", "Konfirmasi Pesanan",  "konfirmasi"),
             ("💳", "Status Pembayaran",   "pembayaran"),
+            ("📊", "Rekap Laporan",       "laporan"),
         ]
         for icon, label, key in menus:
             self._make_menu_item(sb, icon, label, key)
@@ -266,6 +267,8 @@ class AdminDashboard(tk.Toplevel):
             self._show_konfirmasi()
         elif key == "pembayaran":
             self._show_pembayaran()
+        elif key == "laporan":
+            self._show_laporan()
 
     def _show_home(self):
         self._set_active_menu("home")
@@ -293,6 +296,13 @@ class AdminDashboard(tk.Toplevel):
             self.active_frame.destroy()
         from admin.pembayaran import PembayaranPanel
         self.active_frame = PembayaranPanel(self.content_area, self)
+        self.active_frame.pack(fill="both", expand=True)
+
+    def _show_laporan(self):
+        if self.active_frame:
+            self.active_frame.destroy()
+        from admin.laporan import LaporanPanel
+        self.active_frame = LaporanPanel(self.content_area, self)
         self.active_frame.pack(fill="both", expand=True)
 
     def _logout(self):
